@@ -18,7 +18,7 @@ click==8.1.8
     # via flask
 configargparse==1.7
     # via locust
-faker==37.4.0
+faker==35.2.2
     # via -r requirements.in
 flask==3.1.0
     # via
@@ -53,13 +53,17 @@ msgpack==1.1.0
     # via locust
 psutil==7.0.0
     # via locust
+python-dateutil==2.9.0.post0
+    # via faker
 pyzmq==26.3.0
     # via locust
-requests==2.32.4
+requests==2.32.3
     # via locust
-tzdata==2025.2
+six==1.17.0
+    # via python-dateutil
+typing-extensions==4.13.0
     # via faker
-urllib3==2.5.0
+urllib3==2.3.0
     # via
     #   geventhttpclient
     #   requests

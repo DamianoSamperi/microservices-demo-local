@@ -207,6 +207,18 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 		log.Println(err)
 	}
 }
+func (fe *frontendServer) addProductHandler(w http.ResponseWriter, r *http.Request) {
+	currencies, err := fe.getCurrencies(r.Context())
+	if err != nil {
+		renderHTTPError(nil, r, w, err, http.StatusInternalServerError)
+		return
+	}
+	if err := templates.ExecuteTemplate(w, "add_product", injectCommonTemplateData(r, map[string]interface{}{
+		"currencies": currencies,
+	})); err != nil {
+		logrus.Println(err)
+	}
+}
 
 func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
