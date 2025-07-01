@@ -1,44 +1,28 @@
-# Copyright 2024 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Usa un'immagine Python base compatibile con Jetson (ARM64)
+#FROM nvcr.io/nvidia/l4t-pytorch:r35.2.1-pth2.0-py3
+FROM nvcr.io/nvidia/l4t-base:r35.2.1
+WORKDIR /app
 
-FROM --platform=$BUILDPLATFORM python:3.12.8-slim@sha256:123be5684f39d8476e64f47a5fddf38f5e9d839baff5c023c815ae5bdfae0df7 AS base
-
-FROM base AS builder
-
-RUN apt-get -qq update \
-    && apt-get install -y --no-install-recommends g++ \
+# Installa dipendenze di sistema e python3-pip
+RUN apt-get update && apt-get install -y \
+    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# get packages
+ENV TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
+# Aggiorna pip, installa numpy 1.24.4 e poi installa il file wheel di Torch senza cache
+RUN python3 -m pip install --upgrade pip && \
+    python3 -m pip install numpy==1.24.4 && \
+    python3 -m pip install --no-cache-dir $TORCH_INSTALL
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
-FROM base
-# Enable unbuffered logging
 ENV PYTHONUNBUFFERED=1
 
-# get packages
-WORKDIR /shoppingassistantservice
+# Copia i file dell'app
+COPY shoppingassistantservice.py .
 
-# Grab packages from builder
-COPY --from=builder /usr/local/lib/python3.12/ /usr/local/lib/python3.12/
-
-# Add the application
-COPY . .
-
-# set listen port
-ENV PORT "8080"
+# Espone la porta su cui gira Flask
 EXPOSE 8080
 
-ENTRYPOINT ["python", "shoppingassistantservice.py"]
+# Avvia il servizio Flask
+CMD ["python3", "shoppingassistantservice.py"]
