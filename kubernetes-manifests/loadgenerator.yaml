@@ -77,7 +77,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: loadgenerator
+        image: dami00/loadgenerator
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"

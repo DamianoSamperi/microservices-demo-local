@@ -43,7 +43,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: currencyservice
+        image: dami00/currencyservice
         ports:
         - name: grpc
           containerPort: 7000
@@ -52,12 +52,12 @@ spec:
           value: "7000"
         - name: DISABLE_PROFILER
           value: "1"
-        readinessProbe:
-          grpc:
-            port: 7000
-        livenessProbe:
-          grpc:
-            port: 7000
+#        readinessProbe:
+#          grpc:
+#            port: 7000
+#        livenessProbe:
+#          grpc:
+#            port: 7000
         resources:
           requests:
             cpu: 100m

@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingassistantservice
+  labels:
+    app: shoppingassistantservice
+spec:
+  selector:
+    matchLabels:
+      app: shoppingassistantservice
+  template:
+    metadata:
+      labels:
+        app: shoppingassistantservice
+    spec:
+      serviceAccountName: shoppingassistantservice
+      terminationGracePeriodSeconds: 5
+      nodeSelector:
+        kubernetes.io/hostname: jetsonorigin
+      containers:
+      - name: server
+        image: dami00/shoppingassistantservice
+        volumeMounts:
+          #- mountPath: /usr/local/cuda-10.2
+          - mountPath: /usr/local/cuda
+            name: cuda-volume
+          - mountPath: /usr/lib/aarch64-linux-gnu
+            name: lib-volume
+        ports:
+        - name: http
+          containerPort: 8080
+        env:
+        - name: GOOGLE_API_KEY
+          value: "inserisci-la-tua-api-key-qui"
+        - name: DB_HOST
+          value: "postgres"  # nome del service PostgreSQL
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "postgres"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: DB_NAME
+          value: "products"
+        - name: DB_TABLE
+          value: "catalog_items"
+        - name: PROJECT_ID
+          value: local-project
+        - name: REGION
+          value: local
+        resources:
+          requests:
+            cpu: 100m
+            memory: 6Gi
+          limits:
+            cpu: 250m
+            memory: 12Gi
+            nvidia.com/gpu.shared: 1
+      volumes:
+        - name: cuda-volume
+          hostPath:
+            path: /usr/local/cuda
+            type: Directory
+        - name: lib-volume
+          hostPath:
+            path: /usr/lib/aarch64-linux-gnu
+            type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingassistantservice
+  labels:
+    app: shoppingassistantservice
+spec:
+  type: ClusterIP
+  selector:
+    app: shoppingassistantservice
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: shoppingassistantservice
