@@ -1,4 +1,4 @@
-module github.com/GoogleCloudPlatform/microservices-demo/src/frontend
+module github.com/DamianoSamperi/microservices-demo-local/src/frontend
 
 go 1.23
 
