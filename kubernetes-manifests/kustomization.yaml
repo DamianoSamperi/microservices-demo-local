@@ -27,6 +27,9 @@ resources:
  - recommendationservice.yaml
  - shippingservice.yaml
  - shoppingassistantservice.yaml
+ - productmanagementservice.yaml
+ - embeddingservice.yaml
+
 # components:
 # - ../kustomize/components/cymbal-branding
 # - ../kustomize/components/google-cloud-operations

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embeddingservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: embeddingservice
+  template:
+    metadata:
+      labels:
+        app: embeddingservice
+    spec:
+      containers:
+        - name: embeddingservice
+          image: yourregistry/embeddingservice:latest
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: embeddingservice
+spec:
+  selector:
+    app: embeddingservice
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

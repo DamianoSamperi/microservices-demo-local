@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-
+        "os" 
 	"google.golang.org/grpc"
 	pb "productmanagementservice/genproto"
 	embedpb "embeddingservice/genproto"

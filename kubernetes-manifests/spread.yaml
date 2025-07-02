@@ -196,3 +196,39 @@ spec:
                 values:
                 - jetsonorigin
                 - k3s-controlplane-01
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productmanagementservice
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - jetsonorigin
+                - k3s-controlplane-01
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: embeddingservice
+spec:
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                - jetsonorigin
+                - k3s-controlplane-01

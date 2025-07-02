@@ -47,6 +47,11 @@ build:
     context: src/frontend
   - image: adservice
     context: src/adservice
+  - image: productmanagementservice
+    context: src/productmanagementservice
+  - image: embeddingservice
+    context: src/embeddingservice
+
   tagPolicy:
     gitCommit: {}
   local:

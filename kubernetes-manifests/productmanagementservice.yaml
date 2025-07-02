@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productmanagementservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productmanagementservice
+  template:
+    metadata:
+      labels:
+        app: productmanagementservice
+    spec:
+      containers:
+        - name: productmanagementservice
+          image: yourregistry/productmanagementservice:latest
+          ports:
+            - containerPort: 3560
+          env:
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: user
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: PG_HOST
+              value: postgres
+            - name: PG_PORT
+              value: "5432"
+            - name: PG_DB
+              value: shopdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: productmanagementservice
+spec:
+  selector:
+    app: productmanagementservice
+  ports:
+    - protocol: TCP
+      port: 3560
+      targetPort: 3560
