@@ -56,6 +56,37 @@ var (
 
 var validEnvs = []string{"local", "gcp", "azure", "aws", "onprem", "alibaba"}
 
+func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.Request) {
+    err := r.ParseMultipartForm(10 << 20)
+    if err != nil {
+        http.Error(w, "Invalid form data", http.StatusBadRequest)
+        return
+    }
+
+    name := r.FormValue("name")
+    description := r.FormValue("description")
+    priceStr := r.FormValue("price")
+    category := r.FormValue("category")
+
+    priceFloat, err := strconv.ParseFloat(priceStr, 32)
+    if err != nil {
+        http.Error(w, "Invalid price", http.StatusBadRequest)
+        return
+    }
+    price := float32(priceFloat)
+
+    // Qui puoi gestire il file immagine se serve, altrimenti ometti
+
+    id, err := fe.addProduct(r.Context(), name, description, price, category)
+    if err != nil {
+        http.Error(w, "Failed to add product: "+err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    // Redirect alla pagina prodotto appena creato
+    http.Redirect(w, r, "/product/"+id, http.StatusSeeOther)
+}
+
 func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
 	log.WithField("currency", currentCurrency(r)).Info("home")
