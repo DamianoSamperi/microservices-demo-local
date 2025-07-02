@@ -13,11 +13,27 @@ RUN apt-get update && \
 
 # Installa pip e numpy
 RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install numpy==1.24.4
+    python3 -m pip install numpy
 
 # Installa PyTorch ottimizzato per Jetson
-ENV TORCH_WHL="https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl"
-RUN python3 -m pip install --no-cache-dir $TORCH_WHL
+#ENV TORCH_WHL="https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl"
+#RUN python3 -m pip install --no-cache-dir $TORCH_WHL
+# Install python packages
+RUN pip3 install --no-cache-dir future \
+    && pip3 install --no-cache-dir --upgrade wheel mock pillow \
+    && pip3 install --no-cache-dir testresources \
+    && pip3 install --no-cache-dir setuptools==58.3.0 \
+    && pip3 install --no-cache-dir Cython \
+    && pip3 install --no-cache-dir gdown
+
+# Download the PyTorch wheel using gdown
+RUN gdown https://drive.google.com/uc?id=1TqC6_2cwqiYacjoLhLgrZoap6-sVL2sd -O torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
+
+# Install the PyTorch wheel
+RUN pip3 install --no-cache-dir torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
+
+# Clean up wheel file to reduce image size
+RUN rm torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
 
 # Copia requirements e installa le librerie Python aggiuntive (es. transformers, sentence-transformers)
 COPY requirements.txt .
