@@ -1,5 +1,4 @@
-module productmanagementservice
-
+module github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice
 go 1.23.0
 
 toolchain go1.23.10
