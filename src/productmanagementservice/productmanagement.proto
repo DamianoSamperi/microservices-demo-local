@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package productmanagement;
 
-option go_package = "productmanagementservice/genproto;productmanagement";
+option go_package = "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto;productmanagement";
 
 service ProductManagementService {
   rpc AddProduct(AddProductRequest) returns (AddProductResponse) {}
