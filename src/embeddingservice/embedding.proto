@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package embedding;
+
+option go_package = "embeddingservice/genproto;embedding";
+
+service EmbeddingService {
+  rpc GenerateEmbedding(EmbeddingRequest) returns (EmbeddingResponse);
+}
+
+message EmbeddingRequest {
+  string text = 1;
+}
+
+message EmbeddingResponse {
+  repeated float embedding = 1; // 384-dim vector
+}
