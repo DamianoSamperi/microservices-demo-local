@@ -10,7 +10,7 @@ import (
 	"net"
 	"net/http"
 
-	pb "embeddingservice/genproto"
+	pb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	"google.golang.org/grpc"
 )

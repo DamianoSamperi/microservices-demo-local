@@ -1,4 +1,4 @@
-module embeddingservice
+module github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice
 
 go 1.23.0
 

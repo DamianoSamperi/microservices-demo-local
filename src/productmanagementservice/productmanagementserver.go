@@ -8,8 +8,8 @@ import (
 	"net"
         "os" 
 	"google.golang.org/grpc"
-	pb "productmanagementservice/genproto"
-	embedpb "embeddingservice/genproto"
+	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice"
+	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
