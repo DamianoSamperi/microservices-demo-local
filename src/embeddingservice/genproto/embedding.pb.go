@@ -119,7 +119,7 @@ const file_embedding_proto_rawDesc = "" +
 	"\x11EmbeddingResponse\x12\x1c\n" +
 	"\tembedding\x18\x01 \x03(\x02R\tembedding2b\n" +
 	"\x10EmbeddingService\x12N\n" +
-	"\x11GenerateEmbedding\x12\x1b.embedding.EmbeddingRequest\x1a\x1c.embedding.EmbeddingResponseB%Z#embeddingservice/genproto;embeddingb\x06proto3"
+	"\x11GenerateEmbedding\x12\x1b.embedding.EmbeddingRequest\x1a\x1c.embedding.EmbeddingResponseB\\ZZgithub.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto;embeddingb\x06proto3"
 
 var (
 	file_embedding_proto_rawDescOnce sync.Once

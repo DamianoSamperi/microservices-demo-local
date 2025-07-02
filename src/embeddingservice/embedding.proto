@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package embedding;
 
-option go_package = "embeddingservice/genproto;embedding";
+
+option go_package = "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto;embedding";
 
 service EmbeddingService {
   rpc GenerateEmbedding(EmbeddingRequest) returns (EmbeddingResponse);
