@@ -260,3 +260,26 @@ message Ad {
     // short advertisement text to display.
     string text = 2;
 }
+
+//  ---------------ProductManagerService ---------------
+
+service ProductManagementService {
+  rpc AddProduct(AddProductRequest) returns (AddProductResponse) {}
+}
+
+message AddProductRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string picture = 4;
+  string price_usd_currency_code = 5;
+  int32 price_usd_units = 6;
+  int64 price_usd_nanos = 7;
+  string categories = 8;
+}
+
+message AddProductResponse {
+  bool success = 1;
+  string message = 2;
+}
+
