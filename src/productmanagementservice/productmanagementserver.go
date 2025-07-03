@@ -8,7 +8,7 @@ import (
 	"net"
         "os" 
 	"google.golang.org/grpc"
-	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice"
+	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
