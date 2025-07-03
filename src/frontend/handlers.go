@@ -101,7 +101,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
     }
 
 
-    id, err := fe.addProduct(r.Context(), name, imagePath,, description, currencyCode, priceUnits, priceNanos, category)
+    id, err := fe.addProduct(r.Context(), name, imagePath, description, currencyCode, priceUnits, priceNanos, category)
     if err != nil {
         http.Error(w, "Failed to add product: "+err.Error(), http.StatusInternalServerError)
         return
