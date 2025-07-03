@@ -31,7 +31,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	// Genera embedding
 	textToEmbed := req.Name + " " + req.Description
 
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.GenerateEmbeddingRequest{Text: textToEmbed})
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{Text: textToEmbed})
 	if err != nil {
 		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
 	}
