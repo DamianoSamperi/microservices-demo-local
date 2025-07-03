@@ -5,13 +5,12 @@ go 1.23.0
 toolchain go1.23.10
 
 require (
-	github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice v0.0.0-00010101000000-000000000000
+	github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice 
 	github.com/jackc/pgx/v5 v5.7.5
 	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6
 )
 
-replace github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice => ../embeddingservice
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
