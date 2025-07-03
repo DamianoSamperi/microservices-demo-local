@@ -17,7 +17,7 @@ package main
 import (
 	"context"
 	"time"
-
+        "github.com/google/uuid"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
 
 	"github.com/pkg/errors"
@@ -42,26 +42,35 @@ func (fe *frontendServer) getCurrencies(ctx context.Context) ([]string, error) {
 	return out, nil
 }
 
-func (fe *frontendServer) addProduct(ctx context.Context, name, description string, Price_usd_currency_code string, Price_usd_units int32, Price_usd_nanos int64, category string) (string, error) {
-    client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
+func (fe *frontendServer) addProduct(
+	ctx context.Context,
+	name, picture, description string,
+	priceUsdCurrencyCode string,
+	priceUsdUnits int32,
+	priceUsdNanos int64,
+	category string,
+) (string, error) {
+	client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
 
-    req := &pb.AddProductRequest{
-        Id: uuid.New().String(),
-        Name: name,
-        Description: description,
-        price_usd_currency_code: Price_usd_currency_code,
-        price_usd_units: Price_usd_units,
-        price_usd_nanos: Price_usd_nanos,
-        Categories:  category,
-    }
+	req := &pb.AddProductRequest{
+		Id:                   uuid.New().String(),
+		Name:                 name,
+		Description:          description,
+		Picture:              picture,
+		PriceUsdCurrencyCode: priceUsdCurrencyCode,
+		PriceUsdUnits:        priceUsdUnits,
+		PriceUsdNanos:        priceUsdNanos,
+		Categories:           category,
+	}
 
-    resp, err := client.AddProduct(ctx, req)
-    if err != nil {
-        return "", err
-    }
+	resp, err := client.AddProduct(ctx, req)
+	if err != nil {
+		return "", err
+	}
 
-    return resp.Id, nil
+	return resp.Id, nil
 }
+
 
 func (fe *frontendServer) getProducts(ctx context.Context) ([]*pb.Product, error) {
 	resp, err := pb.NewProductCatalogServiceClient(fe.productCatalogSvcConn).
