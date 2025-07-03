@@ -42,13 +42,15 @@ func (fe *frontendServer) getCurrencies(ctx context.Context) ([]string, error) {
 	return out, nil
 }
 
-func (fe *frontendServer) addProduct(ctx context.Context, name, description string, price float32, category string) (string, error) {
+func (fe *frontendServer) addProduct(ctx context.Context, name, description string, price_usd_currency_code string,price_usd_units int32,price_usd_nanos int64, category string) (string, error) {
     client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
 
     req := &pb.AddProductRequest{
         Name:        name,
         Description: description,
-        PriceUsd:    price,
+        price_usd_currency_code: price_usd_currency_cod,
+        price_usd_units: price_usd_units,
+        price_usd_nanos: price_usd_nanos,
         Categories:  category,
     }
 
