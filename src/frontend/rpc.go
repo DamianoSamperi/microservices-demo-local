@@ -68,7 +68,7 @@ func (fe *frontendServer) addProduct(
 		return "", err
 	}
 
-	return resp.ID, nil
+	return resp.id, nil
 }
 
 
