@@ -1820,6 +1820,7 @@ type AddProductResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Id            string                 `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1864,6 +1865,13 @@ func (x *AddProductResponse) GetSuccess() bool {
 func (x *AddProductResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
+	}
+	return ""
+}
+
+func (x *AddProductResponse) GetId() string {
+	if x != nil {
+		return x.Id
 	}
 	return ""
 }
@@ -1989,10 +1997,11 @@ const file_demo_proto_rawDesc = "" +
 	"\x0fprice_usd_nanos\x18\a \x01(\x03R\rpriceUsdNanos\x12\x1e\n" +
 	"\n" +
 	"categories\x18\b \x01(\tR\n" +
-	"categories\"H\n" +
+	"categories\"X\n" +
 	"\x12AddProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xca\x01\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\tR\x02id2\xca\x01\n" +
 	"\vCartService\x12<\n" +
 	"\aAddItem\x12\x1b.hipstershop.AddItemRequest\x1a\x12.hipstershop.Empty\"\x00\x12;\n" +
 	"\aGetCart\x12\x1b.hipstershop.GetCartRequest\x1a\x11.hipstershop.Cart\"\x00\x12@\n" +
