@@ -22,4 +22,5 @@ message AddProductRequest {
 message AddProductResponse {
   bool success = 1;
   string message = 2;
+  string id = 3;
 }

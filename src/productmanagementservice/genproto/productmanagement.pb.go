@@ -125,6 +125,7 @@ type AddProductResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Id            string                 `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -173,6 +174,13 @@ func (x *AddProductResponse) GetMessage() string {
 	return ""
 }
 
+func (x *AddProductResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
 var File_productmanagement_proto protoreflect.FileDescriptor
 
 const file_productmanagement_proto_rawDesc = "" +
@@ -188,13 +196,14 @@ const file_productmanagement_proto_rawDesc = "" +
 	"\x0fprice_usd_nanos\x18\a \x01(\x03R\rpriceUsdNanos\x12\x1e\n" +
 	"\n" +
 	"categories\x18\b \x01(\tR\n" +
-	"categories\"H\n" +
+	"categories\"X\n" +
 	"\x12AddProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2w\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\tR\x02id2w\n" +
 	"\x18ProductManagementService\x12[\n" +
 	"\n" +
-	"AddProduct\x12$.productmanagement.AddProductRequest\x1a%.productmanagement.AddProductResponse\"\x00B5Z3productmanagementservice/genproto;productmanagementb\x06proto3"
+	"AddProduct\x12$.productmanagement.AddProductRequest\x1a%.productmanagement.AddProductResponse\"\x00BlZjgithub.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto;productmanagementb\x06proto3"
 
 var (
 	file_productmanagement_proto_rawDescOnce sync.Once
