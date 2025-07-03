@@ -76,8 +76,10 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
     price := float32(priceFloat)
 
     // Qui puoi gestire il file immagine se serve, altrimenti ometti
-
-    id, err := fe.addProduct(r.Context(), name, description, price, category)
+    currencyCode := "USD"
+    priceUnits := int32(price)
+    priceNanos := int64((price - float32(priceUnits)) * 1e9)
+    id, err := fe.addProduct(r.Context(), name, description, currencyCode, priceUnits, priceNanos, category)
     if err != nil {
         http.Error(w, "Failed to add product: "+err.Error(), http.StatusInternalServerError)
         return
