@@ -79,7 +79,29 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
     currencyCode := "USD"
     priceUnits := int32(price)
     priceNanos := int64((price - float32(priceUnits)) * 1e9)
-    id, err := fe.addProduct(r.Context(), name, description, currencyCode, priceUnits, priceNanos, category)
+    //trovo immagine
+    file, handler, err := r.FormFile("image")
+    if err != nil {
+        http.Error(w, "Errore nel caricamento dell'immagine", http.StatusBadRequest)
+        return
+    }
+    defer file.Close()
+    imagePath := "static/images/" + handler.Filename
+    dst, err := os.Create(imagePath)
+    if err != nil {
+        http.Error(w, "Errore nel salvataggio dell'immagine", http.StatusInternalServerError)
+        return
+    }
+    defer dst.Close()
+
+    _, err = io.Copy(dst, file)
+    if err != nil {
+        http.Error(w, "Errore nella copia del file", http.StatusInternalServerError)
+        return
+    }
+
+
+    id, err := fe.addProduct(r.Context(), name, imagePath,, description, currencyCode, priceUnits, priceNanos, category)
     if err != nil {
         http.Error(w, "Failed to add product: "+err.Error(), http.StatusInternalServerError)
         return
