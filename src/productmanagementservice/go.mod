@@ -5,7 +5,6 @@ go 1.23.0
 toolchain go1.23.10
 
 require (
-	github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice 
 	github.com/jackc/pgx/v5 v5.7.5
 	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6
