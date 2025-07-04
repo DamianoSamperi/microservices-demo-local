@@ -50,7 +50,7 @@ COPY go.mod .
 COPY go.sum .
 RUN go mod download
 
-COPY embeddingproxy.go .
+COPY embedding_service.go .
 RUN go build -o embeddingservice-go embedding_service.go
 
 # Copia lo script di avvio
