@@ -42,7 +42,7 @@ RUN pip3 install gdown
 
 RUN gdown --id 1yC3Wmxa66n5F605AvZ1tjG7nGl_MSA-H -O all-MiniLM-L6-v2.tar.gz
 RUN tar -xzvf all-MiniLM-L6-v2.tar.gz
-
+RUN rm all-MiniLM-L6-v2.tar.gz
 
 # Copia il servizio di embedding
 COPY embedding_service.py .
