@@ -30,7 +30,7 @@ RUN pip3 install --no-cache-dir future \
 #RUN gdown https://drive.google.com/uc?id=1TqC6_2cwqiYacjoLhLgrZoap6-sVL2sd -O torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
 
 # Install the PyTorch wheel
-àRUN pip3 install --no-cache-dir torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
+#RUN pip3 install --no-cache-dir torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
 
 # Clean up wheel file to reduce image size
 #RUN rm torch-1.10.0a0+git36449ea-cp36-cp36m-linux_aarch64.whl
