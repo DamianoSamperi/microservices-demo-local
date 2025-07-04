@@ -4,7 +4,7 @@
 FROM nvcr.io/nvidia/l4t-pytorch:r32.7.1-pth1.10-py3
 # Cartella di lavoro
 WORKDIR /app
-
+RUN sed -i '/kitware.com/d' /etc/apt/sources.list
 # Installazione dipendenze di sistema
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
