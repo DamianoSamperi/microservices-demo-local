@@ -10,7 +10,7 @@ app = FastAPI()
 
 # Carica modello e tokenizer (esempio con modello SentenceTransformers)
 tokenizer = AutoTokenizer.from_pretrained("/app/model")
-model = AutoModel.from_pretrained("/app/model", from_flax=True)
+model = AutoModel.from_pretrained("/app/model")
 
 
 class EmbeddingRequest(BaseModel):
