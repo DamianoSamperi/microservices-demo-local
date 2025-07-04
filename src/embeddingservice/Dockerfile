@@ -43,12 +43,25 @@ RUN gdown --id 17ZvySnEnXwWxe81dtkECJ5qiN6S9Pbti -O all-MiniLM-L6-v2.tar.gz
 RUN tar -xzvf all-MiniLM-L6-v2.tar.gz
 RUN rm all-MiniLM-L6-v2.tar.gz
 
-# Copia il servizio di embedding
-COPY embedding_service.py .
-
-# Porta su cui il servizio Python ascolterà le richieste gRPC via HTTP
-EXPOSE 8000
-
 # Avvia il servizio
 ENV PYTHONUNBUFFERED=1
-CMD ["python3", "embedding_service.py"]
+# Copia e compila il Go service
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+COPY embeddingproxy.go .
+RUN go build -o embeddingproxy embeddingproxy.go
+
+# Copia lo script di avvio
+COPY start.sh .
+RUN chmod +x start.sh
+
+# Copia il file Python
+COPY embedding_service.py .
+
+# Espone entrambe le porte
+EXPOSE 8000 50051
+
+# Avvia entrambi i servizi
+CMD ["./start.sh"]
