@@ -9,8 +9,9 @@ from transformers import AutoTokenizer, AutoModel
 app = FastAPI()
 
 # Carica modello e tokenizer (esempio con modello SentenceTransformers)
-tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
-model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+tokenizer = AutoTokenizer.from_pretrained("/app/all-MiniLM-L6-v2/model")
+model = AutoModel.from_pretrained("/app/all-MiniLM-L6-v2/model")
+
 
 class EmbeddingRequest(BaseModel):
     text: str
