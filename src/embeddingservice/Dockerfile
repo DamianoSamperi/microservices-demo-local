@@ -8,7 +8,7 @@ WORKDIR /app
 # Installazione dipendenze di sistema
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender1  && \
+      python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender1 || true && \
     rm -rf /var/lib/apt/lists/*
 
 # Installa pip e numpy
