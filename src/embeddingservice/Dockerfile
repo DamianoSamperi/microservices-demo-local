@@ -38,6 +38,8 @@ RUN pip3 install --no-cache-dir future \
 # Copia requirements e installa le librerie Python aggiuntive (es. transformers, sentence-transformers)
 COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+RUN pip3 install --upgrade certifi
 
 # Copia il servizio di embedding
 COPY embedding_service.py .
