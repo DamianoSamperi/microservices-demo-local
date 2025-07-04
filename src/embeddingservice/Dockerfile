@@ -8,7 +8,7 @@ RUN sed -i '/kitware.com/d' /etc/apt/sources.list
 # Installazione dipendenze di sistema
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender1 || true && \
+    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender1 netcat && \
     rm -rf /var/lib/apt/lists/*
 
 # Installa pip e numpy
@@ -45,9 +45,17 @@ RUN rm all-MiniLM-L6-v2.tar.gz
 
 # Avvia il servizio
 ENV PYTHONUNBUFFERED=1
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+#Installo Go
+RUN wget https://golang.org/dl/go1.23.0.linux-arm64.tar.gz && \
+    tar -C /usr/local -xzf go1.23.0.linux-arm64.tar.gz && \
+    rm go1.23.0.linux-arm64.tar.gz
+
+ENV PATH="/usr/local/go/bin:${PATH}"
+
 # Copia e compila il Go service
-COPY go.mod .
-COPY go.sum .
+COPY . .
 RUN go mod download
 
 COPY embedding_service.go .
