@@ -51,7 +51,7 @@ COPY go.sum .
 RUN go mod download
 
 COPY embeddingproxy.go .
-RUN go build -o embeddingproxy embeddingproxy.go
+RUN go build -o embeddingservice embedding_service.go
 
 # Copia lo script di avvio
 COPY start.sh .
