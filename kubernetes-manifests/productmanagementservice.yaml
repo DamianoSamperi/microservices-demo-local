@@ -14,15 +14,12 @@ spec:
     spec:
       containers:
         - name: productmanagementservice
-          image: yourregistry/productmanagementservice:latest
+          image: dami00/productmanagementservice:latest
           ports:
             - containerPort: 3560
           env:
             - name: PG_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: user
+              value: "postgres"
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: embeddingservice
-          image: yourregistry/embeddingservice:latest
+          image: dami00/embeddingservice:latest
           ports:
             - containerPort: 8000
           resources:
