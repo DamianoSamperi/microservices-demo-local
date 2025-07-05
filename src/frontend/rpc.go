@@ -44,12 +44,14 @@ func (fe *frontendServer) getCurrencies(ctx context.Context) ([]string, error) {
 
 func (fe *frontendServer) addProduct(
 	ctx context.Context,
-	name, picture, description string,
+	name string,
+	picture []byte, // ← cambia da string a []byte
+	description string,
 	priceUsdCurrencyCode string,
 	priceUsdUnits int32,
 	priceUsdNanos int64,
 	category string,
-) (string, error) {
+) (string, error)  {
 	client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
 
 	req := &pb.AddProductRequest{
