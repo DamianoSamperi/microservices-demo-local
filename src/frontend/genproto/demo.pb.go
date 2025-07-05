@@ -1721,7 +1721,7 @@ type AddProductRequest struct {
 	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name                 string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Description          string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Picture              string                 `protobuf:"bytes,4,opt,name=picture,proto3" json:"picture,omitempty"`
+	Picture              []byte                 `protobuf:"bytes,4,opt,name=picture,proto3" json:"picture,omitempty"`
 	PriceUsdCurrencyCode string                 `protobuf:"bytes,5,opt,name=price_usd_currency_code,json=priceUsdCurrencyCode,proto3" json:"price_usd_currency_code,omitempty"`
 	PriceUsdUnits        int32                  `protobuf:"varint,6,opt,name=price_usd_units,json=priceUsdUnits,proto3" json:"price_usd_units,omitempty"`
 	PriceUsdNanos        int64                  `protobuf:"varint,7,opt,name=price_usd_nanos,json=priceUsdNanos,proto3" json:"price_usd_nanos,omitempty"`
@@ -1781,11 +1781,11 @@ func (x *AddProductRequest) GetDescription() string {
 	return ""
 }
 
-func (x *AddProductRequest) GetPicture() string {
+func (x *AddProductRequest) GetPicture() []byte {
 	if x != nil {
 		return x.Picture
 	}
-	return ""
+	return nil
 }
 
 func (x *AddProductRequest) GetPriceUsdCurrencyCode() string {
@@ -1991,7 +1991,7 @@ const file_demo_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x18\n" +
-	"\apicture\x18\x04 \x01(\tR\apicture\x125\n" +
+	"\apicture\x18\x04 \x01(\fR\apicture\x125\n" +
 	"\x17price_usd_currency_code\x18\x05 \x01(\tR\x14priceUsdCurrencyCode\x12&\n" +
 	"\x0fprice_usd_units\x18\x06 \x01(\x05R\rpriceUsdUnits\x12&\n" +
 	"\x0fprice_usd_nanos\x18\a \x01(\x03R\rpriceUsdNanos\x12\x1e\n" +
