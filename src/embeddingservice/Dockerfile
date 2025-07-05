@@ -39,9 +39,9 @@ RUN pip3 install --no-cache-dir future \
 COPY requirements.txt .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 RUN pip3 install gdown
-RUN gdown --id 17ZvySnEnXwWxe81dtkECJ5qiN6S9Pbti -O all-MiniLM-L6-v2.tar.gz
-RUN tar -xzvf all-MiniLM-L6-v2.tar.gz
-RUN rm all-MiniLM-L6-v2.tar.gz
+#RUN gdown --id 17ZvySnEnXwWxe81dtkECJ5qiN6S9Pbti -O all-MiniLM-L6-v2.tar.gz
+#RUN tar -xzvf all-MiniLM-L6-v2.tar.gz
+#RUN rm all-MiniLM-L6-v2.tar.gz
 
 # Avvia il servizio
 ENV PYTHONUNBUFFERED=1
