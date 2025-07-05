@@ -30,8 +30,10 @@ type server struct {
 func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
 	// Genera embedding
 	textToEmbed := req.Name + " " + req.Description
-
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{Text: textToEmbed})
+	
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+		Image: req.Picture, // supponendo che `picture` ora sia []byte e non string
+	})
 	if err != nil {
 		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
 	}
