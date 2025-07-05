@@ -10,7 +10,7 @@ service EmbeddingService {
 }
 
 message EmbeddingRequest {
-  string text = 1;
+  bytes image = 1;  // immagine raw o codificata (es. PNG/JPEG)
 }
 
 message EmbeddingResponse {
