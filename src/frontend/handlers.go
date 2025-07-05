@@ -57,58 +57,64 @@ var (
 var validEnvs = []string{"local", "gcp", "azure", "aws", "onprem", "alibaba"}
 
 func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.Request) {
-    err := r.ParseMultipartForm(10 << 20)
-    if err != nil {
-        http.Error(w, "Invalid form data", http.StatusBadRequest)
-        return
-    }
+	err := r.ParseMultipartForm(10 << 20) // 10MB
+	if err != nil {
+		http.Error(w, "Invalid form data", http.StatusBadRequest)
+		return
+	}
 
-    name := r.FormValue("name")
-    description := r.FormValue("description")
-    priceStr := r.FormValue("price")
-    category := r.FormValue("category")
+	name := r.FormValue("name")
+	description := r.FormValue("description")
+	priceStr := r.FormValue("price")
+	category := r.FormValue("category")
 
-    priceFloat, err := strconv.ParseFloat(priceStr, 32)
-    if err != nil {
-        http.Error(w, "Invalid price", http.StatusBadRequest)
-        return
-    }
-    price := float32(priceFloat)
+	priceFloat, err := strconv.ParseFloat(priceStr, 32)
+	if err != nil {
+		http.Error(w, "Invalid price", http.StatusBadRequest)
+		return
+	}
+	price := float32(priceFloat)
 
-    // Qui puoi gestire il file immagine se serve, altrimenti ometti
-    currencyCode := "USD"
-    priceUnits := int32(price)
-    priceNanos := int64((price - float32(priceUnits)) * 1e9)
-    //trovo immagine
-    file, handler, err := r.FormFile("image")
-    if err != nil {
-        http.Error(w, "Errore nel caricamento dell'immagine", http.StatusBadRequest)
-        return
-    }
-    defer file.Close()
-    imagePath := "static/images/" + handler.Filename
-    dst, err := os.Create(imagePath)
-    if err != nil {
-        http.Error(w, "Errore nel salvataggio dell'immagine", http.StatusInternalServerError)
-        return
-    }
-    defer dst.Close()
+	priceUnits := int32(price)
+	priceNanos := int64((price - float32(priceUnits)) * 1e9)
 
-    _, err = io.Copy(dst, file)
-    if err != nil {
-        http.Error(w, "Errore nella copia del file", http.StatusInternalServerError)
-        return
-    }
+	file, _, err := r.FormFile("image")
+	if err != nil {
+		http.Error(w, "Errore nel caricamento dell'immagine", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
 
+	// 🔹 Leggi tutti i bytes dell'immagine
+	imageBytes, err := io.ReadAll(file)
+	if err != nil {
+		http.Error(w, "Errore nella lettura dell'immagine", http.StatusInternalServerError)
+		return
+	}
 
-    id, err := fe.addProduct(r.Context(), name, imagePath, description, currencyCode, priceUnits, priceNanos, category)
-    if err != nil {
-        http.Error(w, "Failed to add product: "+err.Error(), http.StatusInternalServerError)
-        return
-    }
+	// 🔹 Genera ID prodotto (puoi usare UUID se preferisci)
+	productID := fmt.Sprintf("prod-%d", time.Now().UnixNano())
 
-    // Redirect alla pagina prodotto appena creato
-    http.Redirect(w, r, "/product/"+id, http.StatusSeeOther)
+	// 🔹 Invia i dati al product management service
+	req := &pb.AddProductRequest{
+		Id:                    productID,
+		Name:                  name,
+		Description:           description,
+		Picture:               imageBytes, // ora bytes, non stringa
+		PriceUsdCurrencyCode:  "USD",
+		PriceUsdUnits:         priceUnits,
+		PriceUsdNanos:         priceNanos,
+		Categories:            category,
+	}
+
+	resp, err := fe.productCatalog.AddProduct(r.Context(), req)
+	if err != nil || !resp.Success {
+		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
+		return
+	}
+
+	// 🔹 Redirect alla pagina del prodotto appena creato
+	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
 }
 
 func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
