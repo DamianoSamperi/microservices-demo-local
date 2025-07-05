@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
-        "os" 
+  "os" 
 	"google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
@@ -28,9 +29,18 @@ type server struct {
 }
 
 func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
+	// 1. Leggi immagine dal path
+	imageBytes, err := ioutil.ReadFile(req.Picture)
+	if err != nil {
+		return &pb.AddProductResponse{Success: false, Message: "cannot read image: " + err.Error()}, nil
+	}
 
+	// 2. Codifica immagine in base64
+	imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
+
+	// 3. Chiama il servizio di embedding passando la base64
 	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
-		Image: req.Picture, // supponendo che `picture` ora sia []byte e non string
+		Image: []byte(imageB64), // anche se proto è `bytes`, passiamo base64 come string
 	})
 	if err != nil {
 		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
@@ -38,10 +48,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 
 	embedding := embedResp.Embedding
 
-	// Convert embedding []float32 in formato adatto a postgres vector (float8[])
-	// Nota: la tua colonna è vector(384), quindi array di 384 float8. PG driver deve supportarlo
-	// Spesso si può fare passando come []byte o come array testo. Qui useremo array testuale
-
+	// 4. Prepara l'embedding come array Postgres
 	embeddingStr := "{" // Postgres array literal
 	for i, v := range embedding {
 		embeddingStr += fmt.Sprintf("%f", v)
@@ -51,7 +58,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	}
 	embeddingStr += "}"
 
-	// Inserisci nel DB
+	// 5. Inserimento nel DB
 	query := `
 		INSERT INTO catalog_items
 			(id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
@@ -62,13 +69,13 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	_, err = s.db.ExecContext(ctx, query,
 		req.Id, req.Name, req.Description, req.Picture,
 		req.PriceUsdCurrencyCode, req.PriceUsdUnits, req.PriceUsdNanos,
-		req.Categories, embeddingStr, "your-embedding-model",
+		req.Categories, embeddingStr, "mobilenet-v2",
 	)
 	if err != nil {
 		return &pb.AddProductResponse{Success: false, Message: "db insert error: " + err.Error()}, nil
 	}
 
-	return &pb.AddProductResponse{Success: true, Message: "product added"}, nil
+	return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
 }
 
 func main() {
