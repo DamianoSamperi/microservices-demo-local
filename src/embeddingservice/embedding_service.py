@@ -12,36 +12,38 @@ import io
 
 app = FastAPI()
 
-# Load MobileNetV2 model without classifier
 model = models.mobilenet_v2(pretrained=True)
 model.classifier = torch.nn.Identity()
 model.eval()
 
-# Preprocessing for images
 preprocess = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
     transforms.Normalize(
-        mean=[0.485, 0.456, 0.406],  # ImageNet means
-        std=[0.229, 0.224, 0.225]    # ImageNet stds
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
     )
 ])
 
-@app.post("/embedding")
-async def generate_embedding(image: UploadFile = File(...)):
+class EmbeddingRequest(BaseModel):
+    image: str  # base64 string
+
+class EmbeddingResponse(BaseModel):
+    embedding: List[float]
+
+@app.post("/embedding", response_model=EmbeddingResponse)
+def generate_embedding(req: EmbeddingRequest):
     try:
-        image_bytes = await image.read()
+        image_bytes = base64.b64decode(req.image)
         img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        input_tensor = preprocess(img).unsqueeze(0)  # shape: (1, 3, 224, 224)
+        input_tensor = preprocess(img).unsqueeze(0)
 
         with torch.no_grad():
-            embedding = model(input_tensor).squeeze(0).tolist()  # shape: (1280,)
+            embedding = model(input_tensor).squeeze(0).tolist()
 
-        return JSONResponse(content={"embedding": embedding})
+        return EmbeddingResponse(embedding=embedding)
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
-
-
+        return {"error": str(e)}
 
 
 
