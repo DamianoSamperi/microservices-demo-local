@@ -34,6 +34,7 @@ import (
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/money"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/validator"
+	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 )
 
 type platformDetails struct {
@@ -95,7 +96,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	productID := fmt.Sprintf("prod-%d", time.Now().UnixNano())
 
 	// 🔹 Invia i dati al product management service
-	req := &pb.AddProductRequest{
+	req := &productpb.AddProductRequest{
 		Id:                    productID,
 		Name:                  name,
 		Description:           description,
