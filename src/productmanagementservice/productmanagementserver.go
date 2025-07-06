@@ -19,7 +19,7 @@ import (
 
 const (
 	port              = ":3560"
-	embeddingSvcAddr  = "localhost:50051" // indirizzo microservizio embedding
+	embeddingSvcAddr  = "embeddingservice:50051" // indirizzo microservizio embedding
 	postgresConnStr   = "postgresql://user:password@localhost:5432/yourdb?sslmode=disable"
 	embeddingDim      = 384
 )
