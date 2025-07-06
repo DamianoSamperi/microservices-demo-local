@@ -107,7 +107,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	embeddingClient := embedding.NewEmbeddingServiceClient(conn)
+	embeddingClient := embedpb.NewEmbeddingServiceClient(conn)
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
