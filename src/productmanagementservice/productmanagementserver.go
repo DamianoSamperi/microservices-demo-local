@@ -41,80 +41,48 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding 
-	//embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
-	//	Image: req.Picture,
-	//})
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+		Image: req.Picture,
+	})
 
-	//if err != nil {
-	//	return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
-	//}
+	if err != nil {
+		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	}
 
-	//embedding := embedResp.Embedding
+	embedding := embedResp.Embedding
 	
 
-	//if err != nil {
-	//		return nil, fmt.Errorf("embedding failed: %v", err)
-	//}
+	if err != nil {
+			return nil, fmt.Errorf("embedding failed: %v", err)
+	}
 	// 4. Prepara l'embedding come array Postgres
-	//embeddingStr := "{" // Postgres array literal
-	//for i, v := range embedding {
-	//	embeddingStr += fmt.Sprintf("%f", v)
-	//	if i < len(embedding)-1 {
-	//		embeddingStr += ","
-	//	}
-	//}
-	//embeddingStr += "}"
+	embeddingStr := "{" // Postgres array literal
+	for i, v := range embedding {
+		embeddingStr += fmt.Sprintf("%f", v)
+		if i < len(embedding)-1 {
+			embeddingStr += ","
+		}
+	}
+	embeddingStr += "}"
 
 	// 5. Inserimento nel DB
-	//query := `
-	//	INSERT INTO catalog_items
-	//		(id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
-	//	VALUES
-	//		($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-	//`
+	query := `
+		INSERT INTO catalog_items
+			(id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
+		VALUES
+			($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+	`
 
-	//_, err = s.db.ExecContext(ctx, query,
-	//	req.Id, req.Name, req.Description, req.Picture,
-	//	req.PriceUsdCurrencyCode, req.PriceUsdUnits, req.PriceUsdNanos,
-	//	req.Categories, embeddingStr, "mobilenet-v2",
-	//)
-	//if err != nil {
-	//	return &pb.AddProductResponse{Success: false, Message: "db insert error: " + err.Error()}, nil
-	//}
-
-
-	var logMsg string
-
-	// Tipo di AddProductRequest
-	logMsg += fmt.Sprintf("Tipo req: %T\n", req)
-
-	val := reflect.ValueOf(req).Elem()
-	typ := val.Type()
-
-	logMsg += "Campi di pb.AddProductRequest:\n"
-	for i := 0; i < val.NumField(); i++ {
-		field := typ.Field(i)
-		logMsg += fmt.Sprintf("  - %s (%s)\n", field.Name, field.Type)
+	_, err = s.db.ExecContext(ctx, query,
+		req.Id, req.Name, req.Description, req.Picture,
+		req.PriceUsdCurrencyCode, req.PriceUsdUnits, req.PriceUsdNanos,
+		req.Categories, embeddingStr, "mobilenet-v2",
+	)
+	if err != nil {
+		return &pb.AddProductResponse{Success: false, Message: "db insert error: " + err.Error()}, nil
 	}
 
-	// Tipo di EmbeddingRequest
-	var dummy embedpb.EmbeddingRequest
-	logMsg += fmt.Sprintf("Tipo embedding.EmbeddingRequest: %T\n", dummy)
-
-	embedVal := reflect.ValueOf(&dummy).Elem()
-	embedType := embedVal.Type()
-
-	logMsg += "Campi di embedding.EmbeddingRequest:\n"
-	for i := 0; i < embedVal.NumField(); i++ {
-		field := embedType.Field(i)
-		logMsg += fmt.Sprintf("  - %s (%s)\n", field.Name, field.Type)
-	}
-
-	return &pb.AddProductResponse{
-		Success: true,
-		Message: logMsg,
-		Id:      req.Id,
-	}, nil
+	return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
 }
 
 func main() {
