@@ -41,20 +41,20 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding 
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+	//embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
 	//	Image: req.Picture,
-	})
+	//})
 
-	if err != nil {
-		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
-	}
+	//if err != nil {
+	//	return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	//}
 
 	//embedding := embedResp.Embedding
 	
 
-	if err != nil {
-			return nil, fmt.Errorf("embedding failed: %v", err)
-	}
+	//if err != nil {
+	//		return nil, fmt.Errorf("embedding failed: %v", err)
+	//}
 	// 4. Prepara l'embedding come array Postgres
 	//embeddingStr := "{" // Postgres array literal
 	//for i, v := range embedding {
