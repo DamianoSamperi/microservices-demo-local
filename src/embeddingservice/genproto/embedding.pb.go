@@ -23,7 +23,7 @@ const (
 
 type EmbeddingRequest struct {
 	state         protoimpl.MessageState 
-	image         []byte                 `protobuf:"bytes,1,opt,name=image,proto3" json:"image,omitempty"` 
+	Image         []byte                 `protobuf:"bytes,1,opt,name=image,proto3" json:"image,omitempty"` 
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
