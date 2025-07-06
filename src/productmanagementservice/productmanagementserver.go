@@ -11,8 +11,7 @@ import (
   "os" 
 	_ "encoding/base64"
 	 "google.golang.org/grpc"
-//	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
-	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
+  pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
