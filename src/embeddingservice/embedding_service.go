@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"mime/multipart"
 
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
