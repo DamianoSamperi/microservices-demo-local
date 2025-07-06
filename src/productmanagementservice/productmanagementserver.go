@@ -50,15 +50,9 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 
 	//embedding := embedResp.Embedding
 	
+	// Workaround forzato
 	embedReq := &embedding.EmbeddingRequest{}
-	
-	// Imposta il campo usando reflection
-	val := reflect.ValueOf(embedReq).Elem()
-	if field := val.FieldByName("Image"); field.IsValid() {
-			field.SetBytes(req.Picture)
-	} else {
-			return nil, fmt.Errorf("campo Image non trovato nella struct")
-	}
+	*(*[]byte)(unsafe.Pointer(uintptr(unsafe.Pointer(embedReq)) + unsafe.Offsetof(embedReq.Image))) = req.Picture
 
 	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, embedReq)
 	
