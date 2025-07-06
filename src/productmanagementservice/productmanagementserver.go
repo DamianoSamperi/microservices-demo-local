@@ -30,18 +30,18 @@ type server struct {
 }
 
 func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
-	#// 1. Leggi immagine dal path
-	#imageBytes, err := ioutil.ReadFile(req.Picture)
-	#if err != nil {
-	#	return &pb.AddProductResponse{Success: false, Message: "cannot read image: " + err.Error()}, nil
-	#}
+	// 1. Leggi immagine dal path
+	//imageBytes, err := ioutil.ReadFile(req.Picture)
+	//if err != nil {
+	//	return &pb.AddProductResponse{Success: false, Message: "cannot read image: " + err.Error()}, nil
+	//}
 
-	#// 2. Codifica immagine in base64
-	#imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
+	// 2. Codifica immagine in base64
+	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding passando la base64
 	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
-		#Image: []byte(imageB64), // anche se proto è `bytes`, passiamo base64 come string
+		//Image: []byte(imageB64), // anche se proto è `bytes`, passiamo base64 come string
 		Image: req.Picture, 
 	})
 	if err != nil {
