@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"reflect"
+	_ "fmt"
+	_ "reflect"
 	_ "io/ioutil"
-	"log"
-	"net"
-  "os" 
+	_ "log"
+	_ "net"
+  _ "os" 
 	_ "encoding/base64"
-	"google.golang.org/grpc"
+	_ "google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
@@ -71,7 +71,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//		(id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
 	//	VALUES
 	//		($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-	`
+	//`
 
 	//_, err = s.db.ExecContext(ctx, query,
 	//	req.Id, req.Name, req.Description, req.Picture,
