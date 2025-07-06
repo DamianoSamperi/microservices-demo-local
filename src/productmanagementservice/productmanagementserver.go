@@ -40,16 +40,29 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding 
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedding.EmbeddingRequest{
-		Image: req.Picture,
-	})
+	//embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedding.EmbeddingRequest{
+	//	Image: req.Picture,
+	//})
 
-	if err != nil {
-		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	//if err != nil {
+	//	return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	//}
+
+	//embedding := embedResp.Embedding
+	embedReq := proto.Clone(&embedding.EmbeddingRequest{}).(*embedding.EmbeddingRequest)
+	
+	// Impostazione campo con reflection garantita
+	reqValue := reflect.ValueOf(embedReq).Elem()
+	fieldValue := reqValue.FieldByName("Image")
+	if !fieldValue.IsValid() {
+			return nil, fmt.Errorf("campo Image non trovato")
 	}
+	fieldValue.Set(reflect.ValueOf(req.Picture))
 
-	embedding := embedResp.Embedding
-
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, embedReq)
+	if err != nil {
+			return nil, fmt.Errorf("embedding failed: %v", err)
+	}
 	// 4. Prepara l'embedding come array Postgres
 	embeddingStr := "{" // Postgres array literal
 	for i, v := range embedding {
