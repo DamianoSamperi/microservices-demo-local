@@ -7,7 +7,7 @@ import (
 	"reflect"
 	_ "io/ioutil"
 	"log"
-	_ "net"
+	 "net"
   "os" 
 	_ "encoding/base64"
 	 "google.golang.org/grpc"
@@ -49,7 +49,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
 	}
 
-	embedding := embedResp.Embedding
+	//embedding := embedResp.Embedding
 	
 
 	if err != nil {
