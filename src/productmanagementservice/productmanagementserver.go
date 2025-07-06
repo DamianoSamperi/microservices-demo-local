@@ -11,7 +11,7 @@ import (
 	_ "encoding/base64"
 	"google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
-	embedding "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
+	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -26,7 +26,7 @@ const (
 type server struct {
 	pb.UnimplementedProductManagementServiceServer
 	db            *sql.DB
-	embeddingClient embedding.EmbeddingServiceClient
+	embeddingClient embedpb.EmbeddingServiceClient
 }
 
 func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
@@ -40,22 +40,17 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding 
-	//embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedding.EmbeddingRequest{
-	//	Image: req.Picture,
-	//})
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+		Image: req.Picture,
+	})
 
-	//if err != nil {
-	//	return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
-	//}
+	if err != nil {
+		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	}
 
-	//embedding := embedResp.Embedding
+	embedding := embedResp.Embedding
 	
-	// Workaround forzato
-	embedReq := &embedding.EmbeddingRequest{}
-	*(*[]byte)(unsafe.Pointer(uintptr(unsafe.Pointer(embedReq)) + unsafe.Offsetof(embedReq.Image))) = req.Picture
 
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, embedReq)
-	
 	if err != nil {
 			return nil, fmt.Errorf("embedding failed: %v", err)
 	}
