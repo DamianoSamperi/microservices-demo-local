@@ -98,7 +98,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	}
 
 	// Tipo di EmbeddingRequest
-	var dummy embeddingpb.EmbeddingRequest
+	var dummy embedpb.EmbeddingRequest
 	logMsg += fmt.Sprintf("Tipo embedding.EmbeddingRequest: %T\n", dummy)
 
 	embedVal := reflect.ValueOf(&dummy).Elem()
