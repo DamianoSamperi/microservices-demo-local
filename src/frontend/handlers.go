@@ -27,7 +27,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -112,6 +111,8 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Println("DEBUG: messaggio da gRPC:", resp.GetMessage())
+
 
 	// 🔹 Redirect alla pagina del prodotto appena creato
 	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
