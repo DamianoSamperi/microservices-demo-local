@@ -106,12 +106,20 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		Categories:            category,
 	}
 
-	resp, err := fe.addProduct(r.Context(), req)
-	if err != nil || !resp.Success {
+	if err != nil {
+		http.Error(w, "Errore nella chiamata gRPC: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
+	if !resp.Success {
 		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println("DEBUG: messaggio da gRPC:", resp.GetMessage())
+	
+	// Mostra messaggio anche se successo
+	fmt.Println("Messaggio DEBUG dal server:", resp.GetMessage())
+	
+	fmt.Fprintf(w, "Prodotto aggiunto con successo! DEBUG:\n%s", resp.GetMessage())
 
 
 	// 🔹 Redirect alla pagina del prodotto appena creato
