@@ -85,6 +85,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 
 	// 1. Stampa tipo
 	fmt.Printf("Tipo: %T\n", req)
+	log.Printf("Tipo req: %T", req)
 
 	// 2. Stampa i campi della struct
 	val := reflect.ValueOf(req).Elem()
@@ -94,6 +95,19 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	for i := 0; i < val.NumField(); i++ {
 		field := typ.Field(i)
 		fmt.Printf("  - %s (%s)\n", field.Name, field.Type)
+		log.Printf("  - %s (%s)", field.Name, field.Type)
+	}
+	// Stampa info su embedding.EmbeddingRequest
+	var dummy embeddingpb.EmbeddingRequest
+	log.Printf("Tipo embedding.EmbeddingRequest: %T", dummy)
+
+	embedVal := reflect.ValueOf(&dummy).Elem()
+	embedType := embedVal.Type()
+
+	log.Println("Campi di embedding.EmbeddingRequest:")
+	for i := 0; i < embedVal.NumField(); i++ {
+		field := embedType.Field(i)
+		log.Printf("  - %s (%s)", field.Name, field.Type)
 	}
   return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
 }
