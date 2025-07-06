@@ -23,7 +23,7 @@ const (
 
 type EmbeddingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	Image         []byte                 `protobuf:"bytes,1,opt,name=image,proto3" json:"image,omitempty"` // immagine raw o codificata (es. PNG/JPEG)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -58,11 +58,11 @@ func (*EmbeddingRequest) Descriptor() ([]byte, []int) {
 	return file_embedding_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EmbeddingRequest) GetText() string {
+func (x *EmbeddingRequest) GetImage() []byte {
 	if x != nil {
-		return x.Text
+		return x.Image
 	}
-	return ""
+	return nil
 }
 
 type EmbeddingResponse struct {
@@ -113,9 +113,9 @@ var File_embedding_proto protoreflect.FileDescriptor
 
 const file_embedding_proto_rawDesc = "" +
 	"\n" +
-	"\x0fembedding.proto\x12\tembedding\"&\n" +
-	"\x10EmbeddingRequest\x12\x12\n" +
-	"\x04text\x18\x01 \x01(\tR\x04text\"1\n" +
+	"\x0fembedding.proto\x12\tembedding\"(\n" +
+	"\x10EmbeddingRequest\x12\x14\n" +
+	"\x05image\x18\x01 \x01(\fR\x05image\"1\n" +
 	"\x11EmbeddingResponse\x12\x1c\n" +
 	"\tembedding\x18\x01 \x03(\x02R\tembedding2b\n" +
 	"\x10EmbeddingService\x12N\n" +
