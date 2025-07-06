@@ -42,27 +42,11 @@ func (fe *frontendServer) getCurrencies(ctx context.Context) ([]string, error) {
 	return out, nil
 }
 
-func (fe *frontendServer) addProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error)   {
+func (fe *frontendServer) addProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
 	client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
-
-	req := &pb.AddProductRequest{
-		Id:                   uuid.New().String(),
-		Name:                 name,
-		Description:          description,
-		Picture:              picture,
-		PriceUsdCurrencyCode: priceUsdCurrencyCode,
-		PriceUsdUnits:        priceUsdUnits,
-		PriceUsdNanos:        priceUsdNanos,
-		Categories:           category,
-	}
-
-	resp, err := client.AddProduct(ctx, req)
-	if err != nil {
-		return "", err
-	}
-
-	return resp.Id, nil
+	return client.AddProduct(ctx, req)
 }
+
 
 
 func (fe *frontendServer) getProducts(ctx context.Context) ([]*pb.Product, error) {
