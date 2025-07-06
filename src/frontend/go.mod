@@ -3,6 +3,7 @@ module github.com/DamianoSamperi/microservices-demo-local/src/frontend
 go 1.23
 
 require (
+  github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice
 	cloud.google.com/go/compute/metadata v0.6.0
 	cloud.google.com/go/profiler v0.4.2
 	github.com/go-playground/validator/v10 v10.25.0
