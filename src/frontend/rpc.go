@@ -19,7 +19,7 @@ import (
 	"time"
   _ "github.com/google/uuid"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
-
+  productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	"github.com/pkg/errors"
 )
 
@@ -42,8 +42,8 @@ func (fe *frontendServer) getCurrencies(ctx context.Context) ([]string, error) {
 	return out, nil
 }
 
-func (fe *frontendServer) addProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
-	client := pb.NewProductManagementServiceClient(fe.productManagementSvcConn)
+func (fe *frontendServer) addProduct(ctx context.Context, req *productpb.AddProductRequest) (*productpb.AddProductResponse, error) {
+	client := productpb.NewProductManagementServiceClient(fe.productManagementSvcConn)
 	return client.AddProduct(ctx, req)
 }
 
