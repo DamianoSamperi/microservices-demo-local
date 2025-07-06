@@ -105,6 +105,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		PriceUsdNanos:         priceNanos,
 		Categories:            category,
 	}
+  resp, err := fe.addProduct(r.Context(), req)
 
 	if err != nil {
 		http.Error(w, "Errore nella chiamata gRPC: "+err.Error(), http.StatusInternalServerError)
