@@ -11,7 +11,7 @@ import (
 	_ "encoding/base64"
 	"google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
-	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
+	embedding "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -26,7 +26,7 @@ const (
 type server struct {
 	pb.UnimplementedProductManagementServiceServer
 	db            *sql.DB
-	embeddingClient embedpb.EmbeddingServiceClient
+	embeddingClient embedding.EmbeddingServiceClient
 }
 
 func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb.AddProductResponse, error) {
@@ -40,7 +40,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding passando la base64
-	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedding.EmbeddingRequest{
 		//Image: []byte(imageB64), // anche se proto è `bytes`, passiamo base64 come string
 		Image: req.Picture,
 	})
@@ -103,7 +103,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	embeddingClient := embedpb.NewEmbeddingServiceClient(conn)
+	embeddingClient := embedding.NewEmbeddingServiceClient(conn)
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
