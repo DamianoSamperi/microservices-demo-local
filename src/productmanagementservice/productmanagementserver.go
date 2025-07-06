@@ -49,17 +49,19 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//}
 
 	//embedding := embedResp.Embedding
-	embedReq := proto.Clone(&embedding.EmbeddingRequest{}).(*embedding.EmbeddingRequest)
 	
-	// Impostazione campo con reflection garantita
-	reqValue := reflect.ValueOf(embedReq).Elem()
-	fieldValue := reqValue.FieldByName("Image")
-	if !fieldValue.IsValid() {
-			return nil, fmt.Errorf("campo Image non trovato")
+	embedReq := &embedding.EmbeddingRequest{}
+	
+	// Imposta il campo usando reflection
+	val := reflect.ValueOf(embedReq).Elem()
+	if field := val.FieldByName("Image"); field.IsValid() {
+			field.SetBytes(req.Picture)
+	} else {
+			return nil, fmt.Errorf("campo Image non trovato nella struct")
 	}
-	fieldValue.Set(reflect.ValueOf(req.Picture))
 
 	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, embedReq)
+	
 	if err != nil {
 			return nil, fmt.Errorf("embedding failed: %v", err)
 	}
