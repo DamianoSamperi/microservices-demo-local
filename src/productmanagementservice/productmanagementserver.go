@@ -98,7 +98,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 		log.Printf("  - %s (%s)", field.Name, field.Type)
 	}
 	// Stampa info su embedding.EmbeddingRequest
-	var dummy embeddingpb.EmbeddingRequest
+	var dummy embedpb.EmbeddingRequest
 	log.Printf("Tipo embedding.EmbeddingRequest: %T", dummy)
 
 	embedVal := reflect.ValueOf(&dummy).Elem()
