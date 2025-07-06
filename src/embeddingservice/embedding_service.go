@@ -34,14 +34,32 @@ type embeddingResponse struct {
 }
 
 func (s *server) GenerateEmbedding(ctx context.Context, req *pb.EmbeddingRequest) (*pb.EmbeddingResponse, error) {
-	// Prepara la request JSON per il servizio Python
-	jsonReq, err := json.Marshal(embeddingRequest{Text: req.GetText()})
+	// Recupera immagine
+	imgBytes := req.GetImage()
+	if len(imgBytes) == 0 {
+		return nil, fmt.Errorf("image is empty")
+	}
+	// Prepara buffer per multipart/form-data
+	var buf bytes.Buffer
+	writer := multipart.NewWriter(&buf)
+
+	part, err := writer.CreateFormFile("image", "image.jpg")
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal json request: %w", err)
+		return nil, fmt.Errorf("failed to create form file: %w", err)
 	}
 
-	// Fai POST HTTP al servizio Python
-	httpResp, err := http.Post(pythonSvcURL, "application/json", bytes.NewBuffer(jsonReq))
+	_, err = part.Write(imgBytes)
+	if err != nil {
+		return nil, fmt.Errorf("failed to write image to form: %w", err)
+	}
+
+	err = writer.Close()
+	if err != nil {
+		return nil, fmt.Errorf("failed to close multipart writer: %w", err)
+	}
+
+  // Fai POST HTTP al servizio Python (che ora accetta multipart/form-data)
+	httpResp, err := http.Post(pythonSvcURL, writer.FormDataContentType(), &buf)
 	if err != nil {
 		return nil, fmt.Errorf("failed to call python embedding service: %w", err)
 	}
@@ -53,23 +71,19 @@ func (s *server) GenerateEmbedding(ctx context.Context, req *pb.EmbeddingRequest
 		return nil, fmt.Errorf("failed to read python service response: %w", err)
 	}
 
-	// Controlla lo status HTTP
 	if httpResp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("python service returned status %d: %s", httpResp.StatusCode, string(body))
 	}
 
-	// Decodifica JSON risposta Python
 	var resp embeddingResponse
 	if err := json.Unmarshal(body, &resp); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal python response: %w", err)
 	}
 
-	// Controlla dimensione embedding
 	if len(resp.Embedding) != embeddingSize {
 		return nil, fmt.Errorf("unexpected embedding size: got %d, want %d", len(resp.Embedding), embeddingSize)
 	}
 
-	// Restituisci embedding al chiamante gRPC
 	return &pb.EmbeddingResponse{Embedding: resp.Embedding}, nil
 }
 
