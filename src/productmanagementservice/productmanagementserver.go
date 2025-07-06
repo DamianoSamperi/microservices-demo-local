@@ -3,12 +3,12 @@ package main
 import (
 	"context"
 	"database/sql"
-	_ "fmt"
-	_ "reflect"
+	"fmt"
+	"reflect"
 	_ "io/ioutil"
 	_ "log"
 	_ "net"
-  _ "os" 
+  "os" 
 	_ "encoding/base64"
 	_ "google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
@@ -83,7 +83,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//}
 
 	//return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
- 	req := &embedding.EmbeddingRequest{}
+ 	req := &embedpb.EmbeddingRequest{}
 
 	// 1. Stampa tipo
 	fmt.Printf("Tipo: %T\n", req)
