@@ -40,7 +40,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding passando la base64
-	embedReq := &embedding.EmbeddingRequest{Image = req.Picture,}
+	embedReq := &embedding.EmbeddingRequest{Image := req.Picture,}
 	
 	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, embedReq)
 	if err != nil {
