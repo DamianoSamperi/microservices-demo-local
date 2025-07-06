@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"reflect"
 	_ "io/ioutil"
-	_ "log"
+	"log"
 	_ "net"
   "os" 
 	_ "encoding/base64"
-	_ "google.golang.org/grpc"
+	 "google.golang.org/grpc"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
@@ -41,20 +41,20 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//imageB64 := base64.StdEncoding.EncodeToString(imageBytes)
 
 	// 3. Chiama il servizio di embedding 
-	//embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
+	embedResp, err := s.embeddingClient.GenerateEmbedding(ctx, &embedpb.EmbeddingRequest{
 	//	Image: req.Picture,
-	//})
+	})
 
-	//if err != nil {
-	//	return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
-	//}
+	if err != nil {
+		return &pb.AddProductResponse{Success: false, Message: "embedding service error: " + err.Error()}, nil
+	}
 
-	//embedding := embedResp.Embedding
+	embedding := embedResp.Embedding
 	
 
-	//if err != nil {
-	//		return nil, fmt.Errorf("embedding failed: %v", err)
-	//}
+	if err != nil {
+			return nil, fmt.Errorf("embedding failed: %v", err)
+	}
 	// 4. Prepara l'embedding come array Postgres
 	//embeddingStr := "{" // Postgres array literal
 	//for i, v := range embedding {
@@ -82,8 +82,6 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	//	return &pb.AddProductResponse{Success: false, Message: "db insert error: " + err.Error()}, nil
 	//}
 
-	//return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
- 	req := &embedpb.EmbeddingRequest{}
 
 	// 1. Stampa tipo
 	fmt.Printf("Tipo: %T\n", req)
