@@ -17,7 +17,7 @@ package main
 import (
 	"context"
 	"time"
-        "github.com/google/uuid"
+  _ "github.com/google/uuid"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
 
 	"github.com/pkg/errors"
