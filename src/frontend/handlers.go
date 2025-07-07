@@ -128,7 +128,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
   }
 	root := "static"
 
-	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Printf("Error accessing %s: %v\n", path, err)
 			return err
