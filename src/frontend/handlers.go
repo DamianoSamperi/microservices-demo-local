@@ -120,7 +120,13 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	wd, _ := os.Getwd()
   log.Println("Working directory:", wd)
   fmt.Fprintf(w, "Working dir: %s\n", wd)
-  
+  files, err := os.ReadDir(".")
+  if err == nil {
+	  for _, f := range files {
+		  fmt.Fprintf(w, "In dir: %s\n", f.Name())
+	  }
+  }
+
 
 
 	// Salva immagine su disco
