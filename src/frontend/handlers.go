@@ -30,7 +30,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-
+  "path/filepath"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/money"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/validator"
@@ -126,6 +126,23 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		  fmt.Fprintf(w, "In dir: %s\n", f.Name())
 	  }
   }
+	root := "static"
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Printf("Error accessing %s: %v\n", path, err)
+			return err
+		}
+		if info.IsDir() {
+			log.Printf("Dir : %s", path)
+		} else {
+			log.Printf("File: %s", path)
+		}
+		return nil
+	})
+	if err != nil {
+		log.Printf("Walk error: %v", err)
+	}
 
 
 
