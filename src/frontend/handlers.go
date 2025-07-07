@@ -127,6 +127,51 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	// 🔹 Redirect alla pagina del prodotto appena creato
 	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
 }
+func (fe *frontendServer) uploadHandler(w http.ResponseWriter, r *http.Request) {
+	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+
+	// Parse multipart form (max 10MB)
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		log.Errorf("error parsing form: %v", err)
+		http.Error(w, "invalid multipart form", http.StatusBadRequest)
+		return
+	}
+
+	// Get file
+	file, handler, err := r.FormFile("image")
+	if err != nil {
+		log.Errorf("error reading form file: %v", err)
+		http.Error(w, "cannot read image", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Create destination file path
+	dstPath := "static/img/products/" + handler.Filename
+	dstFile, err := os.Create(dstPath)
+	if err != nil {
+		log.Errorf("error creating image file: %v", err)
+		http.Error(w, "cannot save image", http.StatusInternalServerError)
+		return
+	}
+	defer dstFile.Close()
+
+	// Write image to disk
+	_, err = io.Copy(dstFile, file)
+	if err != nil {
+		log.Errorf("error saving image file: %v", err)
+		http.Error(w, "failed to write image", http.StatusInternalServerError)
+		return
+	}
+
+	// Return JSON with image path
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"path": dstPath,
+	})
+}
+
 
 func (fe *frontendServer) homeHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
