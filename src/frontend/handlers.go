@@ -136,7 +136,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		if info.IsDir() {
 			fmt.Fprintf(w,"Dir : %s", path)
 		} else {
-			lfmt.Fprintf(w,"File: %s", path)
+			fmt.Fprintf(w,"File: %s", path)
 		}
 		return nil
 	})
