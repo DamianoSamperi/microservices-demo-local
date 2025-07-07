@@ -15,6 +15,7 @@ spec:
       containers:
         - name: productmanagementservice
           image: dami00/productmanagementservice:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3560
           env:
@@ -30,7 +31,7 @@ spec:
             - name: PG_PORT
               value: "5432"
             - name: PG_DB
-              value: shopdb
+              value: products
 ---
 apiVersion: v1
 kind: Service
