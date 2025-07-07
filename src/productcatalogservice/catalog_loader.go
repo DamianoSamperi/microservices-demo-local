@@ -37,6 +37,9 @@ func loadCatalog(catalog *pb.ListProductsResponse) error {
 	if os.Getenv("ALLOYDB_CLUSTER_NAME") != "" {
 		return loadCatalogFromAlloyDB(catalog)
 	}
+	if os.Getenv("USE_PG") == "true" {
+    return loadCatalogFromPostgres(catalog)
+}
 
 	return loadCatalogFromLocalFile(catalog)
 }
@@ -80,6 +83,45 @@ func getSecretPayload(project, secret, version string) (string, error) {
 	}
 
 	return string(result.Payload.Data), nil
+}
+func loadCatalogFromPostgres(catalog *pb.ListProductsResponse) error {
+	log.Info("loading catalog from standard PostgreSQL...")
+
+	connStr := fmt.Sprintf(
+	    "postgresql://%s:%s@%s:%s/%s?sslmode=disable",
+	    os.Getenv("PG_USER"),
+	    os.Getenv("PG_PASSWORD"),
+	    os.Getenv("PG_HOST"),
+	    os.Getenv("PG_PORT"),
+	    os.Getenv("PG_DB"),
+        )
+	pool, err := pgxpool.New(context.Background(), connStr)
+	if err != nil {
+		return fmt.Errorf("failed to connect to db: %w", err)
+	}
+	defer pool.Close()
+
+	query := "SELECT id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories FROM prodotti"
+	rows, err := pool.Query(context.Background(), query)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	catalog.Products = catalog.Products[:0]
+	for rows.Next() {
+		product := &pb.Product{PriceUsd: &pb.Money{}}
+		var categories string
+		err := rows.Scan(&product.Id, &product.Name, &product.Description, &product.Picture, &product.PriceUsd.CurrencyCode, &product.PriceUsd.Units, &product.PriceUsd.Nanos, &categories)
+		if err != nil {
+			return err
+		}
+		product.Categories = strings.Split(strings.ToLower(categories), ",")
+		catalog.Products = append(catalog.Products, product)
+	}
+
+	log.Info("successfully loaded catalog from Postgres")
+	return nil
 }
 
 func loadCatalogFromAlloyDB(catalog *pb.ListProductsResponse) error {
