@@ -119,6 +119,8 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	}
 	wd, _ := os.Getwd()
   log.Println("Working directory:", wd)
+  http.Error(w, wd, http.StatusInternalServerError)
+  panic(wd)
 
 	// Salva immagine su disco
 	dstPath := "static/img/products/" + name
