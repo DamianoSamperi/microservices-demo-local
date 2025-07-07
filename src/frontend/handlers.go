@@ -134,12 +134,6 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	// Mostra messaggio anche se successo
-	fmt.Println("Messaggio DEBUG dal server:", resp.GetMessage())
-	
-	fmt.Fprintf(w, "Prodotto aggiunto con successo! DEBUG:\n%s", resp.GetMessage())
-
-
 	// 🔹 Redirect alla pagina del prodotto appena creato
 	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
 }
