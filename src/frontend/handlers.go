@@ -30,7 +30,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
-  "path/filepath"
 	pb "github.com/DamianoSamperi/microservices-demo-local/src/frontend/genproto"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/money"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/validator"
