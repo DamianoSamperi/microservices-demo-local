@@ -147,7 +147,9 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 
 
 	// Salva immagine su disco
-	dstPath := "static/img/products/" + name
+	dstPath := "static/img/products/" + name + ".jpg" 
+	fmt.Fprintf(w,"Product name:", name)
+	fmt.Fprintf(w,"Saving image at:", dstPath)
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
 		http.Error(w, "Cannot save image", http.StatusInternalServerError)
