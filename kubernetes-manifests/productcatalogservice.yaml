@@ -52,7 +52,7 @@ spec:
         - name: DISABLE_PROFILER
           value: "1"
         - name: USE_PG
-          value: true
+          value: "true"
         - name: PG_USER
           value: "postgres"
         - name: PG_PASSWORD
