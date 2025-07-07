@@ -58,14 +58,14 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 			return nil, fmt.Errorf("embedding failed: %v", err)
 	}
 	// 4. Prepara l'embedding come array Postgres
-	embeddingStr := "{" // Postgres array literal
-	for i, v := range embedding {
-		embeddingStr += fmt.Sprintf("%f", v)
-		if i < len(embedding)-1 {
-			embeddingStr += ","
-		}
-	}
-	embeddingStr += "}"
+	//embeddingStr := "{" // Postgres array literal
+	//for i, v := range embedding {
+	//	embeddingStr += fmt.Sprintf("%f", v)
+	//	if i < len(embedding)-1 {
+	//		embeddingStr += ","
+	//	}
+	//}
+	//embeddingStr += "}"
 
 	// 5. Inserimento nel DB
 
@@ -79,7 +79,7 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	_, err = s.db.ExecContext(ctx, query,
 		req.Id, req.Name, req.Description, imagePath,
 		req.PriceUsdCurrencyCode, req.PriceUsdUnits, req.PriceUsdNanos,
-		req.Categories, embeddingStr, "mobilenet-v2",
+		req.Categories, embedding, "mobilenet-v2",
 	)
 	if err != nil {
     return &pb.AddProductResponse{Success: false, Message: "image upload error: " + err.Error()}, nil
