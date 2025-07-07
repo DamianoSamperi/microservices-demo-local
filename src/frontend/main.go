@@ -166,7 +166,6 @@ func main() {
 	r.HandleFunc(baseUrl + "/bot", svc.chatBotHandler).Methods(http.MethodPost)
   r.HandleFunc("/add-product", svc.addProductHandler).Methods(http.MethodGet)
 	r.HandleFunc("/add-product", svc.addProductPostHandler).Methods(http.MethodPost)
- r.HandleFunc("/upload", svc.uploadHandler).Methods(http.MethodPost)
 
 
 	var handler http.Handler = r
