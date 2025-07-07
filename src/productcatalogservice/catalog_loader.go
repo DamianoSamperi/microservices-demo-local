@@ -39,7 +39,7 @@ func loadCatalog(catalog *pb.ListProductsResponse) error {
 	}
 	if os.Getenv("USE_PG") == "true" {
     return loadCatalogFromPostgres(catalog)
-}
+ }
 
 	return loadCatalogFromLocalFile(catalog)
 }
