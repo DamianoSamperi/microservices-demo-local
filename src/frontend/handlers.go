@@ -130,18 +130,18 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 
 	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			log.Printf("Error accessing %s: %v\n", path, err)
+			fmt.Fprintf(w, "Error accessing %s: %v\n", path, err)
 			return err
 		}
 		if info.IsDir() {
-			log.Printf("Dir : %s", path)
+			fmt.Fprintf(w,"Dir : %s", path)
 		} else {
-			log.Printf("File: %s", path)
+			lfmt.Fprintf(w,"File: %s", path)
 		}
 		return nil
 	})
 	if err != nil {
-		log.Printf("Walk error: %v", err)
+		fmt.Fprintf(w,"Walk error: %v", err)
 	}
 
 
