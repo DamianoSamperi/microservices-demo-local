@@ -101,7 +101,7 @@ func loadCatalogFromPostgres(catalog *pb.ListProductsResponse) error {
 	}
 	defer pool.Close()
 
-	query := "SELECT id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories FROM prodotti"
+	query := "SELECT id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories FROM catalog_items"
 	rows, err := pool.Query(context.Background(), query)
 	if err != nil {
 		return err
