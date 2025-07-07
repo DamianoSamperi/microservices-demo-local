@@ -117,6 +117,9 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
 		return
 	}
+	wd, _ := os.Getwd()
+  log.Println("Working directory:", wd)
+
 	// Salva immagine su disco
 	dstPath := "static/img/products/" + name
 	dstFile, err := os.Create(dstPath)
