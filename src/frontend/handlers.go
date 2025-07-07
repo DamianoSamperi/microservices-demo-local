@@ -117,39 +117,10 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
 		return
 	}
-	wd, _ := os.Getwd()
-  log.Println("Working directory:", wd)
-  fmt.Fprintf(w, "Working dir: %s\n", wd)
-  files, err := os.ReadDir(".")
-  if err == nil {
-	  for _, f := range files {
-		  fmt.Fprintf(w, "In dir: %s\n", f.Name())
-	  }
-  }
-	root := "static"
-
-	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			fmt.Fprintf(w, "Error accessing %s: %v\n", path, err)
-			return err
-		}
-		if info.IsDir() {
-			fmt.Fprintf(w,"Dir : %s", path)
-		} else {
-			fmt.Fprintf(w,"File: %s", path)
-		}
-		return nil
-	})
-	if err != nil {
-		fmt.Fprintf(w,"Walk error: %v", err)
-	}
-
 
 
 	// Salva immagine su disco
 	dstPath := "static/img/products/" + name + ".jpg" 
-	fmt.Fprintf(w,"Product name:", name)
-	fmt.Fprintf(w,"Saving image at:", dstPath)
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
 		fmt.Fprintf(w,"Error creating file at %s: %v", dstPath, err)
