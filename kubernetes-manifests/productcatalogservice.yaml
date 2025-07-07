@@ -51,12 +51,27 @@ spec:
           value: "3550"
         - name: DISABLE_PROFILER
           value: "1"
-        readinessProbe:
-          grpc:
-            port: 3550
-        livenessProbe:
-          grpc:
-            port: 3550
+        - name: USE_PG
+          valure: true
+        - name: PG_USER
+          value: "postgres"
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
+        - name: PG_HOST
+          value: postgres
+        - name: PG_PORT
+          value: "5432"
+        - name: PG_DB
+          value: products
+#        readinessProbe:
+#          grpc:
+#            port: 3550
+#        livenessProbe:
+#          grpc:
+#            port: 3550
         resources:
           requests:
             cpu: 100m
