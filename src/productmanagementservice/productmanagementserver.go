@@ -66,23 +66,66 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 	embeddingStr += "}"
 
 	// 5. Inserimento nel DB
-	query := `
-		INSERT INTO catalog_items
-			(id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
-		VALUES
-			($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-	`
 
+  imagePath, err := uploadImageToFrontend(picture,"static/img/products/"+name)
 	_, err = s.db.ExecContext(ctx, query,
 		req.Id, req.Name, req.Description, req.Picture,
 		req.PriceUsdCurrencyCode, req.PriceUsdUnits, req.PriceUsdNanos,
 		req.Categories, embeddingStr, "mobilenet-v2",
 	)
 	if err != nil {
+    return &pb.AddProductResponse{Success: false, Message: "image upload error: " + err.Error()}, nil
+}
+	query := `
+		INSERT INTO catalog_items
+			(id, name, description, imagePath, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding, embed_model)
+		VALUES
+			($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+	`
+	if err != nil {
 		return &pb.AddProductResponse{Success: false, Message: "db insert error: " + err.Error()}, nil
 	}
 
 	return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
+}
+
+func uploadImageToFrontend(imageBytes []byte, filename string) (string, error) {
+    body := &bytes.Buffer{}
+    writer := multipart.NewWriter(body)
+
+    part, err := writer.CreateFormFile("image", filename)
+    if err != nil {
+        return "", err
+    }
+
+    _, err = part.Write(imageBytes)
+    if err != nil {
+        return "", err
+    }
+
+    writer.Close()
+
+    resp, err := http.Post("http://frontend:8080/upload", writer.FormDataContentType(), body)
+    if err != nil {
+        return "", err
+    }
+    defer resp.Body.Close()
+
+    if resp.StatusCode != http.StatusOK {
+        b, _ := io.ReadAll(resp.Body)
+        return "", fmt.Errorf("upload failed: %s", string(b))
+    }
+
+    var result struct {
+        Path string `json:"path"`
+    }
+
+    err = json.NewDecoder(resp.Body).Decode(&result)
+    if err != nil {
+        return "", err
+    }
+
+    return result.Path, nil
 }
 
 func main() {
