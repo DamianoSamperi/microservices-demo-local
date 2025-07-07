@@ -27,7 +27,9 @@ ARG SKAFFOLD_GO_GCFLAGS
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} CGO_ENABLED=0 go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /go/bin/frontend .
 RUN chown -R 1000:1000 static
 #FROM scratch
-FROM gcr.io/distroless/static:nonroot
+FROM alpine:3.20
+RUN adduser -D -u 1000 appuser
+USER 1000
 WORKDIR /src
 COPY --from=builder /go/bin/frontend /src/server
 COPY ./templates ./templates
