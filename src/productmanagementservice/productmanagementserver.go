@@ -11,6 +11,8 @@ import (
   "os" 
 	_ "encoding/base64"
 	 "google.golang.org/grpc"
+	 "google.golang.org/grpc/credentials/insecure"
+
   pb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	embedpb "github.com/DamianoSamperi/microservices-demo-local/src/embeddingservice/genproto"
 
