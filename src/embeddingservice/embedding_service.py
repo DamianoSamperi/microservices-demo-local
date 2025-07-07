@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from torchvision import models, transforms
 from PIL import Image
 from typing import List
+from pydantic import BaseModel 
 import torch
 import io
 
