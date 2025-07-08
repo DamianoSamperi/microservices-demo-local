@@ -29,7 +29,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
-
+  "google.golang.org/grpc/health"
 	"cloud.google.com/go/profiler"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
@@ -147,7 +147,10 @@ func run(port string) string {
 	}
 
 	pb.RegisterProductCatalogServiceServer(srv, svc)
-	healthpb.RegisterHealthServer(srv, svc)
+	healthServer := health.NewServer()
+  healthpb.RegisterHealthServer(srv, healthServer)
+  healthServer.SetServingStatus("", healthpb.HealthCheckResponse_SERVING)
+
 
 	go srv.Serve(listener)
 
