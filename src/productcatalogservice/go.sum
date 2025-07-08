@@ -30,8 +30,8 @@ cloud.google.com/go/storage v1.50.0/go.mod h1:l7XeiD//vx5lfqE3RavfmU9yvk5Pp0Zhcv
 cloud.google.com/go/trace v1.11.3 h1:c+I4YFjxRQjvAhRmSsmjpASUKq88chOX854ied0K/pE=
 cloud.google.com/go/trace v1.11.3/go.mod h1:pt7zCYiDSQjC9Y2oqCsh9jF4GStB/hmjrYLsxRR27q8=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708081824-2e16e31e5719 h1:C1AFbVs9wlzJpmpQJTJg1Zb9OF0F2oQ5mQH5/elPTQ4=
-github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708081824-2e16e31e5719/go.mod h1:aFodTzRCxcFJg6L0iOg8zEpUgQso3NTnKSPs2ZJx398=
+github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233 h1:X8UNv9WbBp5m4nYNSsGCWziLLybaO9kk2+yJI3Zl8a8=
+github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233/go.mod h1:aFodTzRCxcFJg6L0iOg8zEpUgQso3NTnKSPs2ZJx398=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.27.0 h1:ErKg/3iS1AKcTkf3yixlZ54f9U1rljCkQyEXWUnIUxc=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.27.0/go.mod h1:yAZHSGnqScoU556rBOVkwLze6WP5N+U11RHuWaGVxwY=
 github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.51.0 h1:fYE9p3esPxA/C0rQ0AHhP0drtPXDRhaWiwg1DPqO7IU=

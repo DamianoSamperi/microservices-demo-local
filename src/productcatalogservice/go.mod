@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go/alloydbconn v1.15.0
 	cloud.google.com/go/profiler v0.4.2
 	cloud.google.com/go/secretmanager v1.14.6
-	github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708081824-2e16e31e5719
+	github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233
 	github.com/golang/protobuf v1.5.4
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/pkg/errors v0.9.1
