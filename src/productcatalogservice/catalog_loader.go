@@ -34,6 +34,11 @@ import (
 func loadCatalog(catalog *pb.ListProductsResponse) error {
 	catalogMutex.Lock()
 	defer catalogMutex.Unlock()
+	conn, err := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+  if err != nil {
+	  log.Fatalf("failed to connect to productmanagementservice: %v", err)
+  }
+  defer conn.Close()
 	productClient := productpb.NewProductManagementServiceClient(conn)
 
 	if os.Getenv("ALLOYDB_CLUSTER_NAME") != "" {
