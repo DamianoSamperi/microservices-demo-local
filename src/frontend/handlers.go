@@ -122,7 +122,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	dstPath := "static/img/products/" + name + ".jpg" 
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
-	  _, delErr := fe.productClient.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
+	  _, delErr := fe.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
 	  if delErr != nil {
 		  log.Printf("Errore durante cancellazione prodotto fallito: %v", delErr)
 	  }
@@ -133,7 +133,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	defer dstFile.Close()
   _, err = dstFile.Write(imageBytes)
 	if err != nil {
-		_, delErr := fe.productClient.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
+		_, delErr := fe.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
 	  if delErr != nil {
 		  log.Printf("Errore durante cancellazione prodotto fallito: %v", delErr)
 	  }
