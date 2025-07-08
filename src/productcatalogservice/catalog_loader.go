@@ -21,7 +21,9 @@ import (
 	"net"
 	"os"
 	"strings"
-
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	
 	"cloud.google.com/go/alloydbconn"
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
