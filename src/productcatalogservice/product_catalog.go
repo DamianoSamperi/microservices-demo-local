@@ -18,8 +18,11 @@ import (
 	"context"
 	"strings"
 	"time"
-
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+	
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/productcatalogservice/genproto"
+	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	"google.golang.org/grpc/codes"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/status"
@@ -76,7 +79,13 @@ func (p *productCatalog) SearchProducts(ctx context.Context, req *pb.SearchProdu
 
 func (p *productCatalog) parseCatalog() []*pb.Product {
 	if reloadCatalog || len(p.catalog.Products) == 0 {
-		err := loadCatalog(&p.catalog)
+		conn, err := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+    if err != nil {
+	    log.Fatalf("failed to connect to productmanagementservice: %v", err)
+    }
+    defer conn.Close()
+	  productClient := productpb.NewProductManagementServiceClient(conn)
+		err := loadCatalog(&p.catalog,productClient)
 		if err != nil {
 			return []*pb.Product{}
 		}
