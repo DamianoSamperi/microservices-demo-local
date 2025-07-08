@@ -125,6 +125,12 @@ func run(port string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+	conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+  if ConErr != nil {
+	  log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
+  }
+  defer conn.Close()
+	productClient := productpb.NewProductManagementServiceClient(conn)
 
 	// Propagate trace context
 	otel.SetTextMapPropagator(
@@ -134,12 +140,6 @@ func run(port string) string {
 	srv = grpc.NewServer(
 		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
 		grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()))
-  conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
-  if ConErr != nil {
-	  log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
-  }
-  defer conn.Close()
-	productClient := productpb.NewProductManagementServiceClient(conn)
 	svc := &productCatalog{}
 	err = loadCatalog(&svc.catalog,productClient)
 	if err != nil {
@@ -147,9 +147,7 @@ func run(port string) string {
 	}
 
 	pb.RegisterProductCatalogServiceServer(srv, svc)
-	//healthpb.RegisterHealthServer(srv, svc)
-	healthServer := healthpb.NewServer()
-  healthpb.RegisterHealthServer(srv, healthServer)
+	healthpb.RegisterHealthServer(srv, svc)
 
 	go srv.Serve(listener)
 
