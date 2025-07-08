@@ -1065,7 +1065,8 @@ var AdService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ProductManagementService_AddProduct_FullMethodName = "/hipstershop.ProductManagementService/AddProduct"
+	ProductManagementService_AddProduct_FullMethodName    = "/hipstershop.ProductManagementService/AddProduct"
+	ProductManagementService_DeleteProduct_FullMethodName = "/hipstershop.ProductManagementService/DeleteProduct"
 )
 
 // ProductManagementServiceClient is the client API for ProductManagementService service.
@@ -1073,6 +1074,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProductManagementServiceClient interface {
 	AddProduct(ctx context.Context, in *AddProductRequest, opts ...grpc.CallOption) (*AddProductResponse, error)
+	DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error)
 }
 
 type productManagementServiceClient struct {
@@ -1092,11 +1094,21 @@ func (c *productManagementServiceClient) AddProduct(ctx context.Context, in *Add
 	return out, nil
 }
 
+func (c *productManagementServiceClient) DeleteProduct(ctx context.Context, in *DeleteProductRequest, opts ...grpc.CallOption) (*DeleteProductResponse, error) {
+	out := new(DeleteProductResponse)
+	err := c.cc.Invoke(ctx, ProductManagementService_DeleteProduct_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductManagementServiceServer is the server API for ProductManagementService service.
 // All implementations must embed UnimplementedProductManagementServiceServer
 // for forward compatibility
 type ProductManagementServiceServer interface {
 	AddProduct(context.Context, *AddProductRequest) (*AddProductResponse, error)
+	DeleteProduct(context.Context, *DeleteProductRequest) (*DeleteProductResponse, error)
 	mustEmbedUnimplementedProductManagementServiceServer()
 }
 
@@ -1106,6 +1118,9 @@ type UnimplementedProductManagementServiceServer struct {
 
 func (UnimplementedProductManagementServiceServer) AddProduct(context.Context, *AddProductRequest) (*AddProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddProduct not implemented")
+}
+func (UnimplementedProductManagementServiceServer) DeleteProduct(context.Context, *DeleteProductRequest) (*DeleteProductResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteProduct not implemented")
 }
 func (UnimplementedProductManagementServiceServer) mustEmbedUnimplementedProductManagementServiceServer() {
 }
@@ -1139,6 +1154,24 @@ func _ProductManagementService_AddProduct_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductManagementService_DeleteProduct_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteProductRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductManagementServiceServer).DeleteProduct(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductManagementService_DeleteProduct_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductManagementServiceServer).DeleteProduct(ctx, req.(*DeleteProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductManagementService_ServiceDesc is the grpc.ServiceDesc for ProductManagementService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1149,6 +1182,10 @@ var ProductManagementService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddProduct",
 			Handler:    _ProductManagementService_AddProduct_Handler,
+		},
+		{
+			MethodName: "DeleteProduct",
+			Handler:    _ProductManagementService_DeleteProduct_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
