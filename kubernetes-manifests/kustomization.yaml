@@ -29,7 +29,7 @@ resources:
  - shoppingassistantservice.yaml
  - productmanagementservice.yaml
  - embeddingservice.yaml
-
+ - local-postgres.yaml
 # components:
 # - ../kustomize/components/cymbal-branding
 # - ../kustomize/components/google-cloud-operations
