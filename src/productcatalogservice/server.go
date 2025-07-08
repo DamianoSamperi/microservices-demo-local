@@ -141,7 +141,7 @@ func run(port string) string {
   defer conn.Close()
 	productClient := productpb.NewProductManagementServiceClient(conn)
 	svc := &productCatalog{}
-	err = loadCatalog(&svc.catalog,productClient
+	err = loadCatalog(&svc.catalog,productClient)
 	if err != nil {
 		log.Fatalf("could not parse product catalog: %v", err)
 	}
