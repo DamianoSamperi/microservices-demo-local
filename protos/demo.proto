@@ -265,6 +265,7 @@ message Ad {
 
 service ProductManagementService {
   rpc AddProduct(AddProductRequest) returns (AddProductResponse) {}
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse) {}
 }
 
 message AddProductRequest {
@@ -284,4 +285,12 @@ message AddProductResponse {
   string id = 3;
 }
 
+message DeleteProductRequest {
+  string id = 1;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+  string message = 2;
+}
 
