@@ -28,6 +28,7 @@ import (
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/productcatalogservice/genproto"
 	"google.golang.org/grpc/credentials/insecure"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
+	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 
 	"cloud.google.com/go/profiler"
 	"github.com/pkg/errors"
@@ -133,9 +134,14 @@ func run(port string) string {
 	srv = grpc.NewServer(
 		grpc.UnaryInterceptor(otelgrpc.UnaryServerInterceptor()),
 		grpc.StreamInterceptor(otelgrpc.StreamServerInterceptor()))
-
+  conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+  if ConErr != nil {
+	  log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
+  }
+  defer conn.Close()
+	productClient := productpb.NewProductManagementServiceClient(conn)
 	svc := &productCatalog{}
-	err = loadCatalog(&svc.catalog)
+	err = loadCatalog(&svc.catalog,productClient
 	if err != nil {
 		log.Fatalf("could not parse product catalog: %v", err)
 	}
