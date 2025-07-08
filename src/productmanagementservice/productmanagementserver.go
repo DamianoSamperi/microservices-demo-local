@@ -89,7 +89,25 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 
 	return &pb.AddProductResponse{Success: true, Message: "product added", Id: req.Id}, nil
 }
+func (s *server) DeleteProduct(ctx context.Context, req *pb.DeleteProductRequest) (*pb.DeleteProductResponse, error) {
+	// Esegui DELETE dal database
+	query := `DELETE FROM catalog_items WHERE id = $1`
+	result, err := s.db.ExecContext(ctx, query, req.Id)
+	if err != nil {
+		return &pb.DeleteProductResponse{Success: false, Message: "DB error: " + err.Error()}, nil
+	}
 
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return &pb.DeleteProductResponse{Success: false, Message: "Error checking rows affected: " + err.Error()}, nil
+	}
+
+	if rowsAffected == 0 {
+		return &pb.DeleteProductResponse{Success: false, Message: "No product found with given ID"}, nil
+	}
+
+	return &pb.DeleteProductResponse{Success: true, Message: "Product deleted successfully"}, nil
+}
 
 func main() {
         postgresConnStr := fmt.Sprintf(
