@@ -26,6 +26,7 @@ import (
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/productcatalogservice/genproto"
+	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -33,12 +34,13 @@ import (
 func loadCatalog(catalog *pb.ListProductsResponse) error {
 	catalogMutex.Lock()
 	defer catalogMutex.Unlock()
+	productClient := productpb.NewProductManagementServiceClient(conn)
 
 	if os.Getenv("ALLOYDB_CLUSTER_NAME") != "" {
 		return loadCatalogFromAlloyDB(catalog)
 	}
 	if os.Getenv("USE_PG") == "true" {
-    return loadCatalogFromPostgres(catalog)
+    return loadCatalogFromPostgres(catalog,productClient)
  }
 
 	return loadCatalogFromLocalFile(catalog)
@@ -84,7 +86,7 @@ func getSecretPayload(project, secret, version string) (string, error) {
 
 	return string(result.Payload.Data), nil
 }
-func loadCatalogFromPostgres(catalog *pb.ListProductsResponse) error {
+func loadCatalogFromPostgres(catalog *pb.ListProductsResponse,productClient productpb.ProductManagementServiceClient) error {
 	log.Info("loading catalog from standard PostgreSQL...")
 
 	connStr := fmt.Sprintf(
@@ -116,13 +118,17 @@ func loadCatalogFromPostgres(catalog *pb.ListProductsResponse) error {
 		if err != nil {
 			return err
 		}
-		if &product.Picture == nil{
-		  pb.RegisterProductManagementServiceServer(s, srv)
+		if product.Picture == "" {
+		  	_, err := productClient.DeleteProduct(context.Background(), &productpb.DeleteProductRequest{
+		        Id: product.Id,
+	       })
+			  	if err != nil {
+		         log.Errorf("Failed to delete product %s: %v", product.Id, err)
+	        }
+	        continue
 		}	
-		else {
-		  product.Categories = strings.Split(strings.ToLower(categories), ",")
-		  catalog.Products = append(catalog.Products, product)
-		}
+		product.Categories = strings.Split(strings.ToLower(categories), ",")
+    catalog.Products = append(catalog.Products, product)
 	}
 
 	log.Info("successfully loaded catalog from Postgres")
