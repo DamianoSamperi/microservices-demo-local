@@ -40,8 +40,8 @@ func (p *productCatalog) Check(ctx context.Context, req *healthpb.HealthCheckReq
 func (p *productCatalog) Watch(req *healthpb.HealthCheckRequest, ws healthpb.Health_WatchServer) error {
 	return status.Errorf(codes.Unimplemented, "health check via Watch not implemented")
 }
-func (p *productCatalog) List(ctx context.Context, req *healthpb.HealthCheckRequest) (*healthpb.HealthCheckResponse, error){
-	return &healthpb.HealthCheckResponse{Status: healthpb.HealthCheckResponse_SERVING},nil
+func (p *productCatalog) List(ctx context.Context, req *healthpb.HealthListRequest) (*healthpb.HealthListResponse, error){
+	return &healthpb.HealthListResponse{Status: healthpb.HealthListResponse_SERVING},nil
 }
 func (p *productCatalog) ListProducts(context.Context, *pb.Empty) (*pb.ListProductsResponse, error) {
 	time.Sleep(extraLatency)
