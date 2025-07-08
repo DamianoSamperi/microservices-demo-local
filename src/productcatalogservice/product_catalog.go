@@ -79,9 +79,9 @@ func (p *productCatalog) SearchProducts(ctx context.Context, req *pb.SearchProdu
 
 func (p *productCatalog) parseCatalog() []*pb.Product {
 	if reloadCatalog || len(p.catalog.Products) == 0 {
-		conn, err := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
-    if err != nil {
-	    log.Fatalf("failed to connect to productmanagementservice: %v", err)
+		conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+    if ConErr != nil {
+	    log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
     }
     defer conn.Close()
 	  productClient := productpb.NewProductManagementServiceClient(conn)
