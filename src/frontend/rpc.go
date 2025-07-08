@@ -47,7 +47,7 @@ func (fe *frontendServer) addProduct(ctx context.Context, req *productpb.AddProd
 	return client.AddProduct(ctx, req)
 }
 func (fe *frontendServer) DeleteProduct(ctx context.Context, req *productpb.DeleteProductRequest) (*productpb.DeleteProductResponse, error) {
-    return fe.productClient.DeleteProduct(ctx, req)
+    return fe.DeleteProduct(ctx, req)
 }
 
 func (fe *frontendServer) getProducts(ctx context.Context) ([]*pb.Product, error) {
