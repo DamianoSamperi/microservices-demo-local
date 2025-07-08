@@ -122,6 +122,10 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	dstPath := "static/img/products/" + name + ".jpg" 
 	dstFile, err := os.Create(dstPath)
 	if err != nil {
+	  _, delErr := fe.productClient.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
+	  if delErr != nil {
+		  log.Printf("Errore durante cancellazione prodotto fallito: %v", delErr)
+	  }
 		fmt.Fprintf(w,"Error creating file at %s: %v", dstPath, err)
 		http.Error(w, "Cannot save image", http.StatusInternalServerError)
 		return
@@ -129,6 +133,10 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	defer dstFile.Close()
   _, err = dstFile.Write(imageBytes)
 	if err != nil {
+		_, delErr := fe.productClient.DeleteProduct(r.Context(), &productpb.DeleteProductRequest{Id: productID})
+	  if delErr != nil {
+		  log.Printf("Errore durante cancellazione prodotto fallito: %v", delErr)
+	  }
 		http.Error(w, "Failed to write image", http.StatusInternalServerError)
 		return
 	}
