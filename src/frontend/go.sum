@@ -14,8 +14,8 @@ cloud.google.com/go/profiler v0.4.2/go.mod h1:7GcWzs9deJHHdJ5J9V1DzKQ9JoIoTGhezw
 cloud.google.com/go/storage v1.43.0 h1:CcxnSohZwizt4LCzQHWvBf1/kvtHUn7gk9QERXPyXFs=
 cloud.google.com/go/storage v1.43.0/go.mod h1:ajvxEa7WmZS1PxvKRq4bq0tFT3vMd502JwstCcYv0Q0=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250706143053-3c4fcb47409e h1:zx88x6o6gTQ3VF9+FbtP8gXQal+HPlFrJMraw2mByh4=
-github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250706143053-3c4fcb47409e/go.mod h1:L+qXRa/OR1gJtmHcxtcVjrU+efyPWvkRFnOaPLE0cWo=
+github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233 h1:X8UNv9WbBp5m4nYNSsGCWziLLybaO9kk2+yJI3Zl8a8=
+github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233/go.mod h1:aFodTzRCxcFJg6L0iOg8zEpUgQso3NTnKSPs2ZJx398=
 github.com/cenkalti/backoff/v4 v4.3.0 h1:MyRJ/UdXutAwSAT+s3wNd7MfTIcy71VQueUuFK343L8=
 github.com/cenkalti/backoff/v4 v4.3.0/go.mod h1:Y3VNntkOUPxTVeUxJ/G5vcM//AlwfmyYozVcomhLiZE=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=

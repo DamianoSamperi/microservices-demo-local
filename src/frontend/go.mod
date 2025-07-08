@@ -22,7 +22,7 @@ require (
 	google.golang.org/protobuf v1.36.6
 )
 
-require github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250706143053-3c4fcb47409e
+require github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice v0.0.0-20250708084240-645a19822233
 
 require (
 	cloud.google.com/go v0.116.0 // indirect
