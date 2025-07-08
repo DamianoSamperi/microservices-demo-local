@@ -44,6 +44,7 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
         image: dami00/productcatalogservice
+        imagePullPolicy: Always
         ports:
         - containerPort: 3550
         env:

@@ -24,7 +24,8 @@ spec:
       containers:
       - name: postgres
         #image: postgres:15
-        image: ankane/pgvector 
+       # image: ankane/pgvector
+        image: dami00/postgres-boutique  
         env:
         - name: POSTGRES_PASSWORD
           valueFrom:
