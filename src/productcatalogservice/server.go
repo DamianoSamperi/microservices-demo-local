@@ -147,7 +147,10 @@ func run(port string) string {
 	}
 
 	pb.RegisterProductCatalogServiceServer(srv, svc)
-	healthpb.RegisterHealthServer(srv, svc)
+	//healthpb.RegisterHealthServer(srv, svc)
+	healthServer := healthpb.NewServer()
+  healthpb.RegisterHealthServer(srv, healthServer)
+
 	go srv.Serve(listener)
 
 	return listener.Addr().String()
