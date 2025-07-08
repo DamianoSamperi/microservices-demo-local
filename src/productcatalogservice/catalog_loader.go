@@ -116,8 +116,13 @@ func loadCatalogFromPostgres(catalog *pb.ListProductsResponse) error {
 		if err != nil {
 			return err
 		}
-		product.Categories = strings.Split(strings.ToLower(categories), ",")
-		catalog.Products = append(catalog.Products, product)
+		if &product.Picture == nil{
+		  pb.RegisterProductManagementServiceServer(s, srv)
+		}	
+		else {
+		  product.Categories = strings.Split(strings.ToLower(categories), ",")
+		  catalog.Products = append(catalog.Products, product)
+		}
 	}
 
 	log.Info("successfully loaded catalog from Postgres")
