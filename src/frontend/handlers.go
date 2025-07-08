@@ -114,6 +114,7 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	
 	if !resp.Success {
 		http.Error(w, "Errore nell'aggiunta del prodotto: "+resp.GetMessage(), http.StatusInternalServerError)
+		productpb.RegisterProductManagementServiceServer(r.Context(), req)
 		return
 	}
 
