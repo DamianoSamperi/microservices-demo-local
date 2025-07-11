@@ -1,3 +1,5 @@
+\c products;
+
 INSERT INTO catalog_items (id, name, description, picture, price_usd_currency_code, price_usd_units, price_usd_nanos, categories, product_embedding ,embed_model) VALUES ('OLJCESPC7Z', 'Sunglasses', 'Add a modern touch to your outfits with these sleek aviator sunglasses.', '/static/img/products/sunglasses.jpg', 'USD', 19, 990000000, 'accessories','[-0.06989346,0.02834782,0.04212042,0.0426
 5339,0.104564965,-0.05998128,0.14363648,-0.0015854192,-0.10223205,0.028356666,0.057681315,0.008166438,-0.0090245735,0.0012823377,0.06608078,0.0390
 17465,-0.013597032,-0.031183176,-0.017601468,0.05876299,-0.05970267,-0.06759821,-0.029948585,0.041527335,-0.037204254,0.0494806,-0.015975598,-0.00
