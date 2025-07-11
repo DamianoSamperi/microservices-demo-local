@@ -73,7 +73,6 @@ service ProductCatalogService {
     rpc ListProducts(Empty) returns (ListProductsResponse) {}
     rpc GetProduct(GetProductRequest) returns (Product) {}
     rpc SearchProducts(SearchProductsRequest) returns (SearchProductsResponse) {}
-    rpc ForceReload(google.protobuf.Empty) returns (ReloadResponse);
 }
 
 message Product {
