@@ -25,6 +25,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -290,6 +291,7 @@ const (
 	ProductCatalogService_ListProducts_FullMethodName   = "/hipstershop.ProductCatalogService/ListProducts"
 	ProductCatalogService_GetProduct_FullMethodName     = "/hipstershop.ProductCatalogService/GetProduct"
 	ProductCatalogService_SearchProducts_FullMethodName = "/hipstershop.ProductCatalogService/SearchProducts"
+	ProductCatalogService_ForceReload_FullMethodName    = "/hipstershop.ProductCatalogService/ForceReload"
 )
 
 // ProductCatalogServiceClient is the client API for ProductCatalogService service.
@@ -299,6 +301,7 @@ type ProductCatalogServiceClient interface {
 	ListProducts(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListProductsResponse, error)
 	GetProduct(ctx context.Context, in *GetProductRequest, opts ...grpc.CallOption) (*Product, error)
 	SearchProducts(ctx context.Context, in *SearchProductsRequest, opts ...grpc.CallOption) (*SearchProductsResponse, error)
+	ForceReload(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ReloadResponse, error)
 }
 
 type productCatalogServiceClient struct {
@@ -336,6 +339,15 @@ func (c *productCatalogServiceClient) SearchProducts(ctx context.Context, in *Se
 	return out, nil
 }
 
+func (c *productCatalogServiceClient) ForceReload(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ReloadResponse, error) {
+	out := new(ReloadResponse)
+	err := c.cc.Invoke(ctx, ProductCatalogService_ForceReload_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductCatalogServiceServer is the server API for ProductCatalogService service.
 // All implementations must embed UnimplementedProductCatalogServiceServer
 // for forward compatibility
@@ -343,6 +355,7 @@ type ProductCatalogServiceServer interface {
 	ListProducts(context.Context, *Empty) (*ListProductsResponse, error)
 	GetProduct(context.Context, *GetProductRequest) (*Product, error)
 	SearchProducts(context.Context, *SearchProductsRequest) (*SearchProductsResponse, error)
+	ForceReload(context.Context, *emptypb.Empty) (*ReloadResponse, error)
 	mustEmbedUnimplementedProductCatalogServiceServer()
 }
 
@@ -358,6 +371,9 @@ func (UnimplementedProductCatalogServiceServer) GetProduct(context.Context, *Get
 }
 func (UnimplementedProductCatalogServiceServer) SearchProducts(context.Context, *SearchProductsRequest) (*SearchProductsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchProducts not implemented")
+}
+func (UnimplementedProductCatalogServiceServer) ForceReload(context.Context, *emptypb.Empty) (*ReloadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForceReload not implemented")
 }
 func (UnimplementedProductCatalogServiceServer) mustEmbedUnimplementedProductCatalogServiceServer() {}
 
@@ -426,6 +442,24 @@ func _ProductCatalogService_SearchProducts_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductCatalogService_ForceReload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductCatalogServiceServer).ForceReload(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductCatalogService_ForceReload_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductCatalogServiceServer).ForceReload(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductCatalogService_ServiceDesc is the grpc.ServiceDesc for ProductCatalogService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -444,6 +478,10 @@ var ProductCatalogService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchProducts",
 			Handler:    _ProductCatalogService_SearchProducts_Handler,
+		},
+		{
+			MethodName: "ForceReload",
+			Handler:    _ProductCatalogService_ForceReload_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
