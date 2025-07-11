@@ -82,28 +82,30 @@ func (p *productCatalog) SearchProducts(ctx context.Context, req *pb.SearchProdu
 	return &pb.SearchProductsResponse{Results: ps}, nil
 }
 
-func (p *productCatalog) ForceReload(ctx context.Context, _ *pb.Empty) (*pb.ReloadResponse, error) {
-	catalogMutex.Lock()
-	defer catalogMutex.Unlock()
 
-	reloadCatalog = true
-	log.Infof("ForceReload called via gRPC: reloadCatalog set to true")
-
-	return &pb.ReloadResponse{Success: true}, nil
-}
 
 func (p *productCatalog) parseCatalog() []*pb.Product {
-	if reloadCatalog || len(p.catalog.Products) == 0 {
-		conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
-    if ConErr != nil {
-	    log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
-    }
-    defer conn.Close()
-	  productClient := productpb.NewProductManagementServiceClient(conn)
-		err := loadCatalog(&p.catalog,productClient)
-		if err != nil {
-			return []*pb.Product{}
-		}
+	//if reloadCatalog || len(p.catalog.Products) == 0 {
+	//	conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+   // if ConErr != nil {
+	 //  log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
+   // }
+   // defer conn.Close()
+	 // productClient := productpb.NewProductManagementServiceClient(conn)
+		//err := loadCatalog(&p.catalog,productClient)
+		//if err != nil {
+		//	return []*pb.Product{}
+		//}
+	//}
+	conn, ConErr := grpc.Dial("productmanagementservice:3560", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if ConErr != nil {
+		log.Fatalf("failed to connect to productmanagementservice: %v", ConErr)
+	}
+	defer conn.Close()
+	productClient := productpb.NewProductManagementServiceClient(conn)
+	err := loadCatalog(&p.catalog,productClient)
+	if err != nil {
+		return []*pb.Product{}
 	}
 	return p.catalog.Products
 }
