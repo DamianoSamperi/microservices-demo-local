@@ -10,6 +10,9 @@ CREATE INDEX cartItemsByUserId ON cart_items(userId);
 
 CREATE DATABASE products;
 \c products;
+
+CREATE EXTENSION IF NOT EXISTS vector;
+
 CREATE TABLE catalog_items (
   id TEXT PRIMARY KEY,
   name TEXT,
