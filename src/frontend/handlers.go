@@ -34,10 +34,6 @@ import (
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/money"
 	"github.com/DamianoSamperi/microservices-demo-local/src/frontend/validator"
 	productpb "github.com/DamianoSamperi/microservices-demo-local/src/productmanagementservice/genproto"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type platformDetails struct {
@@ -144,20 +140,6 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 		http.Error(w, "Failed to write image", http.StatusInternalServerError)
 		return
 	}
-	go func() {
-	conn, err := grpc.Dial("productcatalogservice:3550", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		fmt.Println("Errore connessione ForceReload:", err)
-		return
-	}
-	defer conn.Close()
-
-	client := pb.NewProductCatalogServiceClient(conn)
-	_, err = client.ForceReload(context.Background(), &emptypb.Empty{})
-	if err != nil {
-		fmt.Println("Errore chiamata ForceReload:", err)
-	}
-}()
 
 	// 🔹 Redirect alla pagina del prodotto appena creato
 	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
