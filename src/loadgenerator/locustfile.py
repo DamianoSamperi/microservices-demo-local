@@ -70,7 +70,52 @@ def checkout(l):
         'credit_card_expiration_year': random.randint(current_year, current_year + 70),
         'credit_card_cvv': f"{random.randint(100, 999)}",
     })
-    
+
+def shoppingAssistant(l):
+    prompts = [
+        "Cerco un divano moderno per il soggiorno",
+        "Hai qualcosa per una camera da letto minimalista?",
+        "Mi serve un tappeto in stile boho",
+        "Sto arredando un ufficio elegante",
+        "Cosa consigli per un bagno in stile naturale?"
+    ]
+    #images = [
+    #    None,
+    #    "https://example.com/images/living_room.jpg",
+    #    "https://example.com/images/bedroom.jpg",
+    #    None,
+    #    "https://example.com/images/bathroom.jpg"
+    #]
+    images = [None]
+    i = random.randint(0, len(prompts) - 1)
+    payload = {
+        "message": prompts[i]
+    }
+    if images[i]:
+        payload["image"] = images[i]
+
+    l.client.post("/assistant", json=payload)
+
+def addNewProduct(l):
+    product_id = fake.uuid4()
+    name = fake.word()
+    description = fake.sentence()
+    image_url = "./img/products/mug.jpg"  
+
+    payload = {
+        "id": product_id,
+        "name": name,
+        "description": description,
+        "picture": image_url,
+        "price_usd_currency_code": "USD",
+        "price_usd_units": random.randint(10, 500),
+        "price_usd_nanos": random.randint(0, 999_999_999),
+        "categories": [fake.word() for _ in range(random.randint(1, 3))]
+    }
+
+    l.client.post("/add-product", json=payload)
+
+   
 def logout(l):
     l.client.get('/logout')  
 
@@ -85,7 +130,9 @@ class UserBehavior(TaskSet):
         browseProduct: 10,
         addToCart: 2,
         viewCart: 3,
-        checkout: 1}
+        checkout: 1, 
+        shoppingAssistant: 4,
+        addNewProduct: 2 }
 
 class WebsiteUser(FastHttpUser):
     tasks = [UserBehavior]
