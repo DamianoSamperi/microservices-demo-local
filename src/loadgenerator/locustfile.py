@@ -95,7 +95,7 @@ def shoppingAssistant(l):
     if images[i]:
         payload["image"] = images[i]
 
-    l.client.post("/assistant", json=payload)
+    l.client.post("/bot", json=payload)
 
 def addNewProduct(l):
     product_id = fake.uuid4()
