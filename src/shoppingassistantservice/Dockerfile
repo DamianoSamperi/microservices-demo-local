@@ -22,7 +22,8 @@ ENV PYTHONUNBUFFERED=1
 RUN gdown --id 1Q7w9b3ByMHaVV5HyUhqzhZ61vFW610zG -O /app/model.tar.xz
 
 RUN mkdir -p /root/.cache/huggingface/my_local_model && \
-    tar -xJf /app/model.tar.xz -C /root/.cache/huggingface/my_local_model
+    tar -xJf /app/model.tar.xz -C /root/.cache/huggingface/my_local_model && \
+    rm -f /app/model.tar.xz
 
 
 # Copia i file dell'app
