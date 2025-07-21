@@ -15,6 +15,8 @@
 # limitations under the License.
 
 import random
+import requests
+from io import BytesIO
 from locust import FastHttpUser, TaskSet, between
 from faker import Faker
 import datetime
@@ -102,21 +104,28 @@ def addNewProduct(l):
     category = fake.word()
     price = round(random.uniform(10, 500), 2)
 
-    # Il path locale dell'immagine da caricare (assicurati che esista!)
-    image_path = "./img/products/mug.jpg"
+    # URL immagine remota
+    image_url = "https://plus.unsplash.com/premium_photo-1664007654112-a6a19547ae7b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
-    # Apri l'immagine in modalità binaria
-    with open(image_path, "rb") as img_file:
-        files = {
-            "image": ("mug.jpg", img_file, "image/jpeg")
-        }
-        data = {
-            "name": name,
-            "description": description,
-            "price": str(price),
-            "category": category
-        }
-        l.client.post("/add-product", data=data, files=files)
+    # Scarica l'immagine in memoria
+    response = requests.get(image_url)
+    response.raise_for_status()  # Controlla che abbia scaricato correttamente
+
+    # Crea un file-like object in memoria
+    img_file = BytesIO(response.content)
+
+    files = {
+        "image": ("image.jpg", img_file, "image/jpeg")
+    }
+    data = {
+        "name": name,
+        "description": description,
+        "price": str(price),
+        "category": category
+    }
+
+    l.client.post("/add-product", data=data, files=files)
+
 
 
    
