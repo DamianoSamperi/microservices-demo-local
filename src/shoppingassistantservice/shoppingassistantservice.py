@@ -153,7 +153,7 @@ def recommend():
            # )
             chat_prompt=prompt
             response = llm_generate(chat_prompt)
-            return {"content": response}
+            return {"content": response}, 200
 
         relevant = [{"id": r[0], "name": r[1], "description": r[2], "categories": r[3]} for r in rows]
 
@@ -169,7 +169,7 @@ def recommend():
         print("🧠 Prompt finale:", final_prompt, flush=True)
         result = llm_generate(final_prompt)
         print("🧾 Output raw:", result, flush=True)
-        return {"content": result}
+        return {"content": result}, 200
     except Exception as e:
         print("❌ Errore interno:", e, flush=True)
         traceback.print_exc()  # <- stampa lo stack trace
