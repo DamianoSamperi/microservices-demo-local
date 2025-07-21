@@ -100,20 +100,25 @@ def addNewProduct(l):
     product_id = fake.uuid4()
     name = fake.word()
     description = fake.sentence()
-    image_url = "./img/products/mug.jpg"  
+    category = fake.word()
+    price = round(random.uniform(10, 500), 2)
 
-    payload = {
-        "id": product_id,
-        "name": name,
-        "description": description,
-        "picture": image_url,
-        "price_usd_currency_code": "USD",
-        "price_usd_units": random.randint(10, 500),
-        "price_usd_nanos": random.randint(0, 999_999_999),
-        "categories": [fake.word() for _ in range(random.randint(1, 3))]
-    }
+    # Il path locale dell'immagine da caricare (assicurati che esista!)
+    image_path = "./img/products/mug.jpg"
 
-    l.client.post("/add-product", json=payload)
+    # Apri l'immagine in modalità binaria
+    with open(image_path, "rb") as img_file:
+        files = {
+            "image": ("mug.jpg", img_file, "image/jpeg")
+        }
+        data = {
+            "name": name,
+            "description": description,
+            "price": str(price),
+            "category": category
+        }
+        l.client.post("/add-product", data=data, files=files)
+
 
    
 def logout(l):
