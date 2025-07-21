@@ -142,7 +142,15 @@ func (fe *frontendServer) addProductPostHandler(w http.ResponseWriter, r *http.R
 	}
 
 	// 🔹 Redirect alla pagina del prodotto appena creato
-	http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
+	#http.Redirect(w, r, "/product/"+productID, http.StatusSeeOther)
+	w.Header().Set("Content-Type", "application/json")
+  w.WriteHeader(http.StatusOK)
+  json.NewEncoder(w).Encode(map[string]interface{}{
+	  "success": true,
+  	"id": productID,
+  	"message": "Product created successfully",
+	  "redirect": "/product/" + productID,
+  })
 }
 
 
