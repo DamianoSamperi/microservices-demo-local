@@ -73,20 +73,19 @@ def checkout(l):
 
 def shoppingAssistant(l):
     prompts = [
-        "Cerco un divano moderno per il soggiorno",
+        "Cerco un prodotto per l'estate",
         "Hai qualcosa per una camera da letto minimalista?",
         "Mi serve un tappeto in stile boho",
         "Sto arredando un ufficio elegante",
         "Cosa consigli per un bagno in stile naturale?"
     ]
-    #images = [
-    #    None,
-    #    "https://example.com/images/living_room.jpg",
-    #    "https://example.com/images/bedroom.jpg",
-    #    None,
-    #    "https://example.com/images/bathroom.jpg"
-    #]
-    images = [None]
+    images = [
+        None,
+        "https://plus.unsplash.com/premium_photo-1676823547752-1d24e8597047?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1615874959474-d609969a20ed?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        None,
+        "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ]
     i = random.randint(0, len(prompts) - 1)
     payload = {
         "message": prompts[i]
