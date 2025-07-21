@@ -54,10 +54,6 @@ func (s *server) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*pb
 
 	embedding := embedResp.Embedding
 	
-
-	if err != nil {
-			return nil, fmt.Errorf("embedding failed: %v", err)
-	}
 	// 4. Prepara l'embedding come array Postgres
 	vector := pgvector.NewVector(embedding) 
 	//embeddingStr := "{" // Postgres array literal
