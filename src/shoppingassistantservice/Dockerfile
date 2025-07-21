@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Installa dipendenze di sistema e python3-pip
 RUN apt-get update && apt-get install -y \
-    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender-dev \
+    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender-dev git git-lfs\
     && rm -rf /var/lib/apt/lists/* 
 
 ENV TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/pytorch/torch-2.0.0+nv23.05-cp38-cp38-linux_aarch64.whl
@@ -19,11 +19,10 @@ RUN pip3 install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
-RUN gdown --id 1Q7w9b3ByMHaVV5HyUhqzhZ61vFW610zG -O /app/model.tar.xz
-
-RUN mkdir -p /root/.cache/huggingface/my_local_model && \
-    tar -xJf /app/model.tar.xz -C /root/.cache/huggingface/my_local_model && \
-    rm -f /app/model.tar.xz
+RUN git lfs install && \
+    git clone https://huggingface.co/microsoft/Phi-3.5-mini-instruct /root/.cache/huggingface/my_local_model && \
+    cd /root/.cache/huggingface/my_local_model && \
+    git lfs pull
 
 
 # Copia i file dell'app
