@@ -12,17 +12,18 @@ ENV TORCH_INSTALL=https://developer.download.nvidia.cn/compute/redist/jp/v511/py
 # Aggiorna pip, installa numpy 1.24.4 e poi installa il file wheel di Torch senza cache
 RUN python3 -m pip install --upgrade pip && \
     python3 -m pip install numpy==1.24.4 && \
-    python3 -m pip install --no-cache-dir $TORCH_INSTALL
+    python3 -m pip install --no-cache-dir $TORCH_INSTALL && \
+    pip3 install gdown
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
-# Copia anche lo script di download modelli
-COPY download_models.py .
+RUN gdown --id 1Q7w9b3ByMHaVV5HyUhqzhZ61vFW610zG -O /app/model.tar.xz
 
-# Esegui il download dei modelli durante la build
-RUN python3 download_models.py
+RUN mkdir -p /root/.cache/huggingface/my_local_model && \
+    tar -xJf /app/model.tar.xz -C /root/.cache/huggingface/my_local_model
+
 
 # Copia i file dell'app
 COPY shoppingassistantservice.py .
