@@ -21,7 +21,7 @@ print(device,flush=True)
 #model_name = "microsoft/Phi-3.5-mini-instruct"
 #tokenizer = AutoTokenizer.from_pretrained(model_name)
 #llm = AutoModelForCausalLM.from_pretrained(model_name, device_map="cuda",torch_dtype="auto",trust_remote_code=True,attn_implementation="eager")
-model_path = "/root/.cache/huggingface/my_local_model/Phi-3.5-mini-instruct"
+model_path = "/root/.cache/huggingface/my_local_model"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 llm = AutoModelForCausalLM.from_pretrained(model_path, device_map="cuda", torch_dtype="auto", trust_remote_code=True,attn_implementation="eager")
 # Embedding model (384 dim)
