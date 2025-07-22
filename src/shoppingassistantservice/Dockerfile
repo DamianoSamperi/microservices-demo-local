@@ -1,17 +1,17 @@
-# ================================
-# STAGE 1 – Scarico i modelli (CPU only)
-# ================================
 FROM python:3.8-slim AS model-downloader
 
 RUN apt-get update && apt-get install -y git git-lfs && rm -rf /var/lib/apt/lists/*
-RUN pip install --upgrade pip
-RUN pip install torch==2.0.1+cpu transformers
 
-# Scarica i modelli nella cache Hugging Face
+RUN pip install --upgrade pip && \
+    pip install torch==2.0.1+cpu torchvision==0.15.2+cpu \
+      -f https://download.pytorch.org/whl/cpu/torch_stable.html && \
+    pip install transformers
+
 RUN python -c "\
 from transformers import AutoTokenizer, AutoModelForCausalLM; \
 AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
 AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct', device_map='cpu')"
+
 
 # ================================
 # STAGE 2 – Runtime su Jetson (con CUDA)
