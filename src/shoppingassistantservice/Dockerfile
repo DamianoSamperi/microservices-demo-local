@@ -3,7 +3,7 @@ FROM python:3.8-slim AS model-downloader
 RUN apt-get update && apt-get install -y git git-lfs && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip && \
-    pip install torch==2.0.1 torchvision==0.15.2 transformers 
+    pip install torch==2.0.1 torchvision==0.15.2 transformers accelerate
 
 # Scarica i modelli nella cache
 RUN python -c "\
