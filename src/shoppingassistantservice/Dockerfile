@@ -3,10 +3,9 @@ FROM python:3.8-slim AS model-downloader
 RUN apt-get update && apt-get install -y git git-lfs && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip && \
-    pip install torch==2.0.1+cpu torchvision==0.15.2+cpu \
-      -f https://download.pytorch.org/whl/cpu/torch_stable.html && \
-    pip install transformers
+    pip install torch==2.0.1 torchvision==0.15.2 transformers 
 
+# Scarica i modelli nella cache
 RUN python -c "\
 from transformers import AutoTokenizer, AutoModelForCausalLM; \
 AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
