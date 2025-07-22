@@ -12,6 +12,10 @@ AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
 AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct', device_map='cpu')"
 
 
+# Comprimi solo la cache dei modelli (non tutta la HuggingFace cache)
+RUN tar -cJf /model-cache.tar.xz -C /root/.cache/huggingface hub && \
+    rm -rf /root/.cache/huggingface/hub  # <--- ✅ elimina i file decompressi dopo la compressione
+    
 # ================================
 # STAGE 2 – Runtime su Jetson (con CUDA)
 # ================================
@@ -35,9 +39,10 @@ RUN python3 -m pip install --upgrade pip && \
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
-# Copia i modelli dalla fase precedente
-COPY --from=model-downloader /root/.cache/huggingface/hub/models--microsoft--Phi-3.5-mini-instruct /root/.cache/huggingface/hub/models--microsoft--Phi-3.5-mini-instruct
-
+COPY --from=model-downloader /model-cache.tar.xz /model-cache.tar.xz
+RUN mkdir -p /root/.cache/huggingface && \
+    tar -xJf /model-cache.tar.xz -C /root/.cache/huggingface && \
+    rm /model-cache.tar.xz
 
 # App
 COPY shoppingassistantservice.py .
