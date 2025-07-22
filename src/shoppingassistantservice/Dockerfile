@@ -36,7 +36,8 @@ COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
 # Copia i modelli dalla fase precedente
-COPY --from=model-downloader /root/.cache/huggingface /root/.cache/huggingface
+COPY --from=model-downloader /root/.cache/huggingface/hub/models--microsoft--Phi-3.5-mini-instruct /root/.cache/huggingface/hub/models--microsoft--Phi-3.5-mini-instruct
+
 
 # App
 COPY shoppingassistantservice.py .
