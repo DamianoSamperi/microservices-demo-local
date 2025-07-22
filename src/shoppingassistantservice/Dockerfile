@@ -22,7 +22,8 @@ ENV PYTHONUNBUFFERED=1
 RUN python3 -c "\
 from transformers import AutoTokenizer, AutoModelForCausalLM; \
 AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
-AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct')"
+AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct', device_map='cpu')"
+
 
 # Copia i file dell'app
 COPY shoppingassistantservice.py .
