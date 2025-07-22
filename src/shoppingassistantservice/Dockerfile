@@ -20,7 +20,7 @@ RUN pip3 install -r requirements.txt
 ENV PYTHONUNBUFFERED=1
 
 RUN git lfs install && \
-    git clone https://huggingface.co/microsoft/Phi-3.5-mini-instruct /root/.cache/huggingface/my_local_model && \
+    GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/microsoft/Phi-3.5-mini-instruct /root/.cache/huggingface/my_local_model && \
     cd /root/.cache/huggingface/my_local_model && \
     git lfs pull
 
