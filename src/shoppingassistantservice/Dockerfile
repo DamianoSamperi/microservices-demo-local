@@ -19,11 +19,10 @@ RUN pip3 install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
-RUN git lfs install && \
-    GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/microsoft/Phi-3.5-mini-instruct /root/.cache/huggingface/my_local_model && \
-    cd /root/.cache/huggingface/my_local_model && \
-    git lfs pull
-
+RUN python3 -c "\
+from transformers import AutoTokenizer, AutoModelForCausalLM; \
+AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
+AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct')"
 
 # Copia i file dell'app
 COPY shoppingassistantservice.py .
