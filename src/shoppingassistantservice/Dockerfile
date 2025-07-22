@@ -19,6 +19,8 @@ RUN pip3 install -r requirements.txt
 
 ENV PYTHONUNBUFFERED=1
 
+RUN apt-get update && apt-get install -y libcurand10
+
 RUN python3 -c "\
 from transformers import AutoTokenizer, AutoModelForCausalLM; \
 AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
