@@ -1,24 +1,3 @@
-FROM python:3.8-slim AS model-downloader
-
-RUN apt-get update && apt-get install -y git git-lfs && rm -rf /var/lib/apt/lists/*
-
-RUN pip install --upgrade pip && \
-    pip install torch==2.0.1 torchvision==0.15.2 transformers accelerate
-
-# Scarica i modelli nella cache
-RUN python -c "\
-from transformers import AutoTokenizer, AutoModelForCausalLM; \
-AutoTokenizer.from_pretrained('microsoft/Phi-3.5-mini-instruct'); \
-AutoModelForCausalLM.from_pretrained('microsoft/Phi-3.5-mini-instruct', device_map='cpu')"
-
-
-# Comprimi solo la cache dei modelli (non tutta la HuggingFace cache)
-RUN tar -cJf /model-cache.tar.xz -C /root/.cache/huggingface hub && \
-    rm -rf /root/.cache/huggingface/hub  # <--- ✅ elimina i file decompressi dopo la compressione
-    
-# ================================
-# STAGE 2 – Runtime su Jetson (con CUDA)
-# ================================
 FROM nvcr.io/nvidia/l4t-base:r35.2.1
 
 WORKDIR /app
@@ -38,11 +17,6 @@ RUN python3 -m pip install --upgrade pip && \
 # Requisiti Python
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
-
-COPY --from=model-downloader /model-cache.tar.xz /model-cache.tar.xz
-RUN mkdir -p /root/.cache/huggingface && \
-    tar -xJf /model-cache.tar.xz -C /root/.cache/huggingface && \
-    rm /model-cache.tar.xz
 
 # App
 COPY shoppingassistantservice.py .
