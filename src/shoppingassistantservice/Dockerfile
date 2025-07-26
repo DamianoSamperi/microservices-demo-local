@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/l4t-base:r35.2.1
+FROM nvcr.io/nvidia/l4t-base:r36.2.0
 
 WORKDIR /app
 
