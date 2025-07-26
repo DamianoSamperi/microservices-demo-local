@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Dipendenze di sistema
 RUN apt-get update && apt-get install -y \
-    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender-dev  \
+    python3-pip python3-dev libjpeg-dev libpng-dev libglib2.0-0 libsm6 libxext6 libxrender-dev libopenblas-dev\
     && rm -rf /var/lib/apt/lists/*
 
 # Installazione torch GPU
