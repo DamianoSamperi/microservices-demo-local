@@ -573,7 +573,11 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 
 	url := "http://" + fe.shoppingAssistantSvcAddr
 	bodyBytes, err := io.ReadAll(r.Body)
-	if err != nil { ... }
+	if err != nil {
+    log.Errorf("failed to read request body: %v", err)
+    http.Error(w, "failed to read body", http.StatusInternalServerError)
+    return
+  }
 	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
 	if err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to create request"), http.StatusInternalServerError)
