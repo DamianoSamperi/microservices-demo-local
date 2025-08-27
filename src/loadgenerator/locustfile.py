@@ -42,25 +42,25 @@ def setCurrency(l):
         {'currency_code': random.choice(currencies)})
 
 def browseProduct(l):
-    l.client.get("/product/" + random.choice(products))
+    l.client.get("/product/" + random.choice(products),timeout=320)
 
 def viewCart(l):
-    l.client.get("/cart")
+    l.client.get("/cart", timeout=320)
 
 def addToCart(l):
     product = random.choice(products)
-    l.client.get("/product/" + product)
-    l.client.post("/cart", {
+    l.client.get("/product/" + product,timeout=320)
+    l.client.post("/cart", timeout=320,{
         'product_id': product,
         'quantity': random.randint(1,10)})
     
 def empty_cart(l):
-    l.client.post('/cart/empty')
+    l.client.post('/cart/empty',timeout=320)
 
 def checkout(l):
     addToCart(l)
     current_year = datetime.datetime.now().year+1
-    l.client.post("/cart/checkout", {
+    l.client.post("/cart/checkout", timeout=320,{
         'email': fake.email(),
         'street_address': fake.street_address(),
         'zip_code': fake.zipcode(),
@@ -96,7 +96,7 @@ def shoppingAssistant(l):
         payload["image"] = images[i]
 
     # l.client.post("/bot", json=payload)
-    with l.client.post("/bot", json=payload, catch_response=True) as response:
+    with l.client.post("/bot", json=payload, timeout=320,catch_response=True) as response:
         if response.status_code == 200:
             try:
                 data = response.json()
