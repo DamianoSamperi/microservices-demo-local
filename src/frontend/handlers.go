@@ -601,9 +601,12 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	// respond with the same message
+	//json.NewEncoder(w).Encode(Response{Message: response.Content})
+	//w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(Response{Message: response.Content})
 
-	w.WriteHeader(http.StatusOK)
 }
 
 func (fe *frontendServer) setCurrencyHandler(w http.ResponseWriter, r *http.Request) {
