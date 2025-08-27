@@ -50,28 +50,37 @@ def viewCart(l):
 def addToCart(l):
     product = random.choice(products)
     l.client.get("/product/" + product,timeout=320)
-    l.client.post("/cart", timeout=320,{
-        'product_id': product,
-        'quantity': random.randint(1,10)})
-    
+    l.client.post(
+        "/cart",
+        json={
+            'product_id': product,
+            'quantity': random.randint(1, 10)
+        },
+        timeout=320
+    )
 def empty_cart(l):
     l.client.post('/cart/empty',timeout=320)
 
 def checkout(l):
     addToCart(l)
-    current_year = datetime.datetime.now().year+1
-    l.client.post("/cart/checkout", timeout=320,{
-        'email': fake.email(),
-        'street_address': fake.street_address(),
-        'zip_code': fake.zipcode(),
-        'city': fake.city(),
-        'state': fake.state_abbr(),
-        'country': fake.country(),
-        'credit_card_number': fake.credit_card_number(card_type="visa"),
-        'credit_card_expiration_month': random.randint(1, 12),
-        'credit_card_expiration_year': random.randint(current_year, current_year + 70),
-        'credit_card_cvv': f"{random.randint(100, 999)}",
-    })
+    current_year = datetime.datetime.now().year + 1
+    l.client.post(
+        "/cart/checkout",
+        json={
+            'email': fake.email(),
+            'street_address': fake.street_address(),
+            'zip_code': fake.zipcode(),
+            'city': fake.city(),
+            'state': fake.state_abbr(),
+            'country': fake.country(),
+            'credit_card_number': fake.credit_card_number(card_type="visa"),
+            'credit_card_expiration_month': random.randint(1, 12),
+            'credit_card_expiration_year': random.randint(current_year, current_year + 70),
+            'credit_card_cvv': f"{random.randint(100, 999)}",
+        },
+        timeout=320
+    )
+
 
 def shoppingAssistant(l):
     prompts = [
