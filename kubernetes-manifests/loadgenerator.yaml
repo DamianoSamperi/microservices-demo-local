@@ -78,6 +78,7 @@ spec:
           privileged: false
           readOnlyRootFilesystem: true
         image: dami00/loadgenerator
+        imagePullPolicy: IfNotPresent
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"

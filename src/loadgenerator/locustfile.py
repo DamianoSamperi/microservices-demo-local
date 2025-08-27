@@ -95,7 +95,7 @@ def shoppingAssistant(l):
     if images[i]:
         payload["image"] = images[i]
 
-    //l.client.post("/bot", json=payload)
+    #l.client.post("/bot", json=payload)
     with l.client.post("/bot", json=payload, catch_response=True) as response:
     if response.status_code == 200:
         try:

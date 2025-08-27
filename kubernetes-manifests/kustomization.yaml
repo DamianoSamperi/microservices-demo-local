@@ -41,5 +41,7 @@ resources:
 # - ../kustomize/components/container-images-tag
 # - ../kustomize/components/container-images-tag-suffix
 # - ../kustomize/components/container-images-registry
-patches:
-  - path: spread.yaml
+#patches:
+#  - path: spread.yaml
+patchesStrategicMerge:
+  - spread.yaml
