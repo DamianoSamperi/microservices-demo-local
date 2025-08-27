@@ -572,7 +572,9 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 	var response LLMResponse
 
 	url := "http://" + fe.shoppingAssistantSvcAddr
-	req, err := http.NewRequest(http.MethodPost, url, r.Body)
+	bodyBytes, err := io.ReadAll(r.Body)
+	if err != nil { ... }
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(bodyBytes))
 	if err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to create request"), http.StatusInternalServerError)
 		return
@@ -586,6 +588,7 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	body, err := io.ReadAll(res.Body)
+	defer res.Body.Close()
 	if err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to read response"), http.StatusInternalServerError)
 		return
@@ -599,6 +602,8 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to unmarshal body"), http.StatusInternalServerError)
 		return
 	}
+	fmt.Printf("Response body from assistant: %s\n", string(body))
+	fmt.Printf("Response status: %d\n", res.StatusCode)
 
 	// respond with the same message
 	//json.NewEncoder(w).Encode(Response{Message: response.Content})
