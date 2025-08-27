@@ -95,7 +95,20 @@ def shoppingAssistant(l):
     if images[i]:
         payload["image"] = images[i]
 
-    l.client.post("/bot", json=payload)
+    //l.client.post("/bot", json=payload)
+    with l.client.post("/bot", json=payload, catch_response=True) as response:
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            if "message" in data:
+                response.success()
+            else:
+                response.failure(f"No 'message' in response: {data}")
+        except Exception as e:
+            response.failure(f"Invalid JSON: {e}")
+    else:
+        response.failure(f"HTTP {response.status_code}: {response.text}")
+
 
 def addNewProduct(l):
     product_id = fake.uuid4()
