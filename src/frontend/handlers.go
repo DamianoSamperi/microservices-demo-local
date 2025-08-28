@@ -565,11 +565,15 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 		Message string `json:"message"`
 	}
 
+	//type LLMResponse struct {
+	//	Content string         `json:"content"`
+	//	Details map[string]any `json:"details"`
+	//}
 	type LLMResponse struct {
-		Content string         `json:"content"`
-		Details map[string]any `json:"details"`
-	}
-
+    Content string         `json:"content"`
+    Details map[string]any `json:"details"`
+    Error   string         `json:"error"`
+  }
 	var response LLMResponse
 
 	url := "http://" + fe.shoppingAssistantSvcAddr
@@ -606,6 +610,11 @@ func (fe *frontendServer) chatBotHandler(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to unmarshal body"), http.StatusInternalServerError)
 		return
+	}
+	if response.Error != "" {
+    log.Errorf("assistant error: %s", response.Error)
+    http.Error(w, response.Error, http.StatusInternalServerError)
+    return
 	}
 	fmt.Printf("Response body from assistant: %s\n", string(body))
 	fmt.Printf("Response status: %d\n", res.StatusCode)
